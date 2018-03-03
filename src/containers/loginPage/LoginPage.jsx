@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import classes from './LoginPage.css';
 import {connect} from 'react-redux';
+import{loadCalendarApi} from '../../store/actions/calendar';
 
 class LogingPage extends Component{
   constructor(props){
@@ -17,6 +18,9 @@ class LogingPage extends Component{
       </div>
     );
   }
+  componentDidMount(){
+    this.props.loadCalendars();
+  }
 }
 const mapStateToProp = state=>{
   return{
@@ -26,7 +30,7 @@ const mapStateToProp = state=>{
 
 const mapDispatchToProp = dispatch=>{
   return{
-
+    loadCalendars: ()=>dispatch(loadCalendarApi())
   }
 }
 
