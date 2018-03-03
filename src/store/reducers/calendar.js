@@ -1,9 +1,8 @@
 const initialState = {
-    allCalendarsId: [],
+    allCalendars: [],
 
-    currentCalendarId: '',
-    currentCalendarEvents: [],
-    calendar: '1488'
+    currentCalendar: '',
+    currentCalendarEvents: []
 }
 
 export default function calendar(state = initialState, action) {
@@ -15,11 +14,27 @@ export default function calendar(state = initialState, action) {
                     currentCalendarId: action.payload
                 }
             }
+        case 'SAVE_CALENDAR':
+            {
+                const calendars = [...state.allCalendars];
+                calendars.push(action.payload);
+                return {
+                    ...state,
+                    allCalendars: [...calendars]
+                }
+            }
         case 'CREATE_CALENDARS_LIST':
             {
                 return {
                     ...state,
-                    allCalendarsId: [...action.payload]
+                    allCalendars: [...action.payload]
+                }
+            }
+        case 'LOAD_CALENDAR_EVENTS':
+            {
+                return {
+                    ...state,
+                    currentCalendarEvents: [...action.payload]
                 }
             }
 

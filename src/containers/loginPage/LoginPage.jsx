@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import classes from './LoginPage.css';
 import {connect} from 'react-redux';
 import{loadCalendarApi} from '../../store/actions/calendar';
+import CalendarList from '../Calendars/CalendarsList';
 
 class LogingPage extends Component{
   constructor(props){
@@ -14,7 +15,9 @@ class LogingPage extends Component{
         <div>
           <button id="continue-button" >Continue as = {this.props.calendar} </button>
           <button id="signout-button" >Sign Out</button>
+          
         </div>
+        <CalendarList/>
       </div>
     );
   }
