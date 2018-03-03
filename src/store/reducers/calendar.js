@@ -11,7 +11,7 @@ export default function calendar(state = initialState, action) {
             {
                 return {
                     ...state,
-                    currentCalendarId: action.payload
+                    currentCalendar: action.payload
                 }
             }
         case 'SAVE_CALENDAR':
