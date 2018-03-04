@@ -6,9 +6,8 @@ import classes from './CalendarItem.css';
  */
 const calendarItem=(props)=>(
   <div className={classes.CalendarItem} onClick={props.clicked}>
-  <div>{props.calendarName}</div>
+    <div>{props.calendarName}</div>
     <div>{props.calendarId}</div>
-    {props.isActive?<span>current</span>:null}
   </div>
 );
 export default calendarItem;
