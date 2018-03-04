@@ -8,36 +8,114 @@ class RoomManager extends Component{
   constructor(props){
     super(props);
     this.state={
-      activeEvent: {},
-      currentTime: ''
+      currentTime: '',
+      timeToNextEvent:'',
+      room:{
+        status:'Available',
+        eventName:'',
+        description:'',
+        timeStart:'',
+        timeEnd:'',
+        BtnName:''
+      },
+
     }
     this.timer=null;
     this.clock=null;
   }
 
   loadCurrentEvent=()=>{
-    this.props.events;
+    let event = this.props.events[0];
+    let timeToEvent = Date.parse(event.start) - this.state.currentTime;
+    
+    if( Date.parse(event.start) > this.state.currentTime ){
+      if(  timeToEvent > 15 * 60 * 1000 ){
+          this.setState({
+            room: {
+              status:'Available',
+              timeStart: timeToEvent,
+              eventName:'',
+              description:'',
+              timeEnd:'',
+              BtnName:'Quick book for now!',
+          }
+        });
+      }
+      else{
+        this.setState({room:{
+          status:'Reserved',
+          timeStart: timeToEvent,
+          BtnName: 'Quick check-in',
+          eventName:'',
+          description:'',
+          timeEnd:'',
+
+        }
+      });
+      }
+      this.setState({timeToNextEvent:timeToEvent});
+    }
+    else{
+      let timeStart=Date.parse(event.start);
+      let timeEnd=Date.parse(event.end);
+      this.setState({room:{
+        status:'Busy',
+        eventName: event.name,
+        description: 'description',
+        timeStart: this.getClock(timeStart),
+        timeEnd: this.getClock(timeEnd),
+        BtnName: 'View'
+      }});        
+      }
+  }
+
+  /**
+   * Convert integer time to hh:mm format
+   * @param {integer} dateTime - time in integer format
+   * @returns {string} - time in hh:mm format 
+   */
+  getClock(dateTime){
+    let time = new Date(dateTime);
+    return time.getHours() + ":" + (time.getMinutes()<10 ? "0" + time.getMinutes(): time.getMinutes());
+  }
+  onRoomStatusBtnClickHandler = () =>{
+    alert('create new event');
   }
   render(){
     
     return (
       <div className={classes.RoomManager}>
         Room Status
-        <RoomStatus status="" eventName="" timeToEventStart="" timeToEventEnd="" description="" currentTime={this.state.currentTime} clicked={''}/>
+        <RoomStatus 
+          status={this.state.room.status} 
+          eventName={this.state.room.eventName} 
+          timeEventBegin={this.state.room.timeStart} 
+          timeEventFinish={this.state.room.timeEnd}
+          timeToNextEvent={this.getClock(this.state.timeToNextEvent)} 
+          description={this.state.room.description} 
+          currentTime={this.getClock(this.state.currentTime)} 
+          BtnName={this.state.room.BtnName}
+          clicked={this.onRoomStatusBtnClickHandler}
+          />
       </div>
     );
   }
+
   componentDidMount(){
     const that=this;
+    
     this.timer = setInterval(()=>{// load evetns for calendar from google api every 1 min
-      that.props.loadCalenadarEvents(this.props.currentCalendar,this.props.token);
+      if(that.props.currentCalendar) that.props.loadCalenadarEvents(this.props.currentCalendar,this.props.token);
+      setTimeout(()=>{
+        that.loadCurrentEvent();
+      },1000)
+      
     },60000);
     
     this.clock=setInterval(()=>{
       let t=new Date();
-      let time=t.getHours()+":"+ (t.getMinutes()<10?"0"+t.getMinutes():t.getMinutes());
-      if(that.state.currentTime!==time){
-          this.setState({currentTime: time});
+      if(that.state.currentTime!==t){
+          this.setState({currentTime: t});
         }
     },1000);
   }
