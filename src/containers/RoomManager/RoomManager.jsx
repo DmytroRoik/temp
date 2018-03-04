@@ -26,6 +26,18 @@ class RoomManager extends Component{
 
   loadCurrentEvent=()=>{
     let event = this.props.events[0];
+    if(!event){
+      this.setState({
+        room: {
+          status:'Available',
+          timeStart: ' - ',
+          eventName:'',
+          description:'',
+          timeEnd:'',
+          BtnName:'Quick book for now!',
+      }
+    });
+    }
     let timeToEvent = Date.parse(event.start) - this.state.currentTime;
     
     if( Date.parse(event.start) > this.state.currentTime ){
@@ -85,7 +97,6 @@ class RoomManager extends Component{
     
     return (
       <div className={classes.RoomManager}>
-        Room Status
         <RoomStatus 
           status={this.state.room.status} 
           eventName={this.state.room.eventName} 
@@ -105,10 +116,10 @@ class RoomManager extends Component{
     const that=this;
     
     this.timer = setInterval(()=>{// load evetns for calendar from google api every 1 min
-      if(that.props.currentCalendar) that.props.loadCalenadarEvents(this.props.currentCalendar,this.props.token);
-      setTimeout(()=>{
-        that.loadCurrentEvent();
-      },1000)
+      if(that.props.currentCalendar){
+        that.props.loadCalenadarEvents(this.props.currentCalendar,this.props.token);
+         that.loadCurrentEvent();
+      }
       
     },60000);
     

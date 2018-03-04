@@ -6,8 +6,8 @@ import classes from './CalendarItem.css';
  */
 const calendarItem=(props)=>(
   <div className={classes.CalendarItem} onClick={props.clicked}>
-    <div>{props.calendarName}</div>
-    <div>{props.calendarId}</div>
+    <div className={classes.calendarName}>{props.calendarName}</div>
+    <div className={classes.calendarId}>{props.calendarId}</div>
   </div>
 );
 export default calendarItem;

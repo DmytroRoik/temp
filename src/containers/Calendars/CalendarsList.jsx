@@ -37,7 +37,7 @@ class CalendarList extends Component{
   render(){
     return (
       <div className={classes.CalendarList}>
-        <h4>Select Calendars for device:</h4>
+        <h2>Select Calendars for device:</h2>
         <ul>
           {this.props.calendars.map(calendar=>{
               return <CalendarItem 
@@ -49,10 +49,16 @@ class CalendarList extends Component{
           }
         </ul>
         {this.state.showCreateCalendarInput? 
-          <input type="text" ref={inp=>this.newCalendarInput=inp}/>
+          <input 
+            placeholder="enter name for calendar"
+            type="text" 
+            ref={inp=>this.newCalendarInput=inp}
+            className={classes.newCalendarInput}/>
           :null}
         
-        <button onClick={this.onAddCalendarClickHandler}>+</button>
+        <button 
+          onClick={this.onAddCalendarClickHandler}
+          className={classes.AddBtn}>+</button>
       </div>
     );
   }

@@ -20,22 +20,36 @@ const roomStatus=(props)=>{
 
   return (
   <div className={classes.RoomStatus}>
-    <div className={classes.status}>{statusText}</div>
 
-    {props.status!=="Available"?
-      <div>
-        <div>
-          {props.timeEventBegin}
-          <span>-</span>
-          {props.timeEventFinish}
+    <div className={classes.header}>
+      <div className={classes.container}>
+        <div className={classes.status}>{statusText}</div>
+        { props.status!=="Available"?
+          <div>
+            <div className={classes.EventDuration}>
+              {props.timeEventBegin}
+              <span>-</span>
+              {props.timeEventFinish}
+            </div>
+            <p>{props.description}</p>
         </div>
-        <p>{props.description}</p>
+        : <div>
+            <div className={classes.EventStart}>
+              {'for ' + props.timeToNextEvent.replace(':','h ')+' min' }
+            </div>
+            <div className={classes.arrow}>&raquo;</div>
+          </div>
+
+        }
+       </div>
+    </div>
+
+    <div className={classes.footer}>
+      <div className={classes.container}>
+        <div className={classes.clock}>{props.currentTime}</div>
+        <button onClick={props.clicked} className={classes.btn}>{props.BtnName}</button>  
       </div>
-      :<div className={classes.EventStart}>{props.timeToNextEvent}</div>
-    }
-    <div>&raquo;</div>
-    <div>{props.currentTime}</div>
-    <button onClick={props.clicked}>{props.BtnName}</button>  
+    </div>
   </div>
 );}
 export default roomStatus;
