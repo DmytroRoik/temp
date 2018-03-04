@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './CalendarItem.css';
 
 /**
- * Use: <CalendarItem calendarId="" isActive={false||true} clicked={event}/>  
+ * Use: <CalendarItem calendarId=""clicked={event}/>  
  */
 const calendarItem=(props)=>(
   <div className={classes.CalendarItem} onClick={props.clicked}>

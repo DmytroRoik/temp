@@ -15,11 +15,13 @@ export const selectCalendar = (id) => {
 /**
  * Save calendars id to store
  * @param {Array} calendarsId -- Array of calendar`s id
+ * @param {string} token - user token for google api
  */
-const createCalendarsList = (calendarsId) => {
+const createCalendarsList = (calendarsId, token) => {
     return {
         type: "CREATE_CALENDARS_LIST",
-        payload: calendarsId
+        payload: calendarsId,
+        token: token
     }
 }
 
@@ -35,6 +37,13 @@ const saveCalendar = calendar => {
         type: "SAVE_CALENDAR",
         payload: calendar
     }
+}
+
+export const toggleCalendarsListVisibility = isVisible=>{
+  return{
+    type:"TOGGLE_CALENDAR",
+    payload: isVisible
+  }
 }
 
 
@@ -62,7 +71,6 @@ const initClient = () => {
             window.gapi.auth2.getAuthInstance().signIn()
                 .then(function(arg) {
                         let access_token = arg.Zi.access_token;
-                        localStorage.setItem('access_token', access_token);
                         axios.get(`https://www.googleapis.com/calendar/v3/users/me/calendarList?access_token=${access_token}`)
                             .then(res => {
                                 res = res.data.items;
@@ -74,7 +82,7 @@ const initClient = () => {
                                             name: element.summary
                                         });
                                 });
-                                dispatch(createCalendarsList(calendars));
+                                dispatch(createCalendarsList(calendars, access_token));
                             })
                             .catch(error => {
                                 console.log(error.message)
@@ -85,42 +93,47 @@ const initClient = () => {
     }
 }
 
-export const loadEvents = (calendarId) => {
-    let access_token = localStorage.getItem('access_token');
+/**
+ * Load future events for special calendar
+ * @param {string} calendarId - id of google calendar
+ * @param {string} access_token - user token for google api
+ */
+export const loadEvents = (calendarId, access_token) => {
     return dispatch => {
         axios.get(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?access_token=${access_token}`)
             .then(res => {
                 res = res.data;
                 let calendarEvents = [];
+                let curDate=new Date();
                 res.items.forEach(e => { //events
+                  let endDatetime= new Date(e.end.dateTime);
+                  if(endDatetime>curDate){
                     let event = {
                         name: e.summary,
                         id: e.id,
                         start: e.start.dateTime,
                         end: e.end.dateTime,
-                        status: e.status,
-                        htmlLink: e.htmlLink,
                     }
                     calendarEvents.push(event);
+                  }
                 });
                 dispatch(saveCalendarEvents(calendarEvents));
             });
     }
-
-
 }
 
 /**
  *  Create a new google Calendar
  * @param {string} calendarName - name of new Calendar
+ * @param {string} access_token -user token for google api
  */
-export const createCalendar = (calendarName) => {
+export const createCalendar = (calendarName, access_token) => {
     let data = {
             "summary": calendarName
         },
         headers = {
             headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('access_token'),
+                'Authorization': 'Bearer ' + access_token,
             }
         }
     return dispatch => {

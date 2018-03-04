@@ -3,7 +3,7 @@ import classes from './CalendarList.css';
 
 import CalendarItem from '../../components/CalendarItem/CalendarItem';
 import { connect } from 'react-redux';
-import {createCalendar,loadEvents,selectCalendar} from '../../store/actions/calendar';
+import {createCalendar,loadEvents,selectCalendar, toggleCalendarsListVisibility} from '../../store/actions/calendar';
 
 class CalendarList extends Component{
   constructor(props){
@@ -19,7 +19,7 @@ class CalendarList extends Component{
         return el.name===name;
       })
       
-      if(name && isNameUniq)this.props.createCalendar(name);
+      if(name && isNameUniq)this.props.createCalendar(name,this.props.token);
       else alert('name must be uniq')
     }
     this.setState((prevState)=>{
@@ -30,12 +30,14 @@ class CalendarList extends Component{
   }
   onCalendarItemClickHandler=(id)=>{
     this.props.selectCalendar(id);
-    this.props.loadCalendarEvents(id);
+    this.props.loadCalendarEvents(id,this.props.token);
+    this.props.toggleCalendarList(false)
   } 
+
   render(){
     return (
       <div className={classes.CalendarList}>
-        <h4>All calendars:</h4>
+        <h4>Select Calendars for device:</h4>
         <ul>
           {this.props.calendars.map(calendar=>{
               return <CalendarItem 
@@ -57,15 +59,17 @@ class CalendarList extends Component{
 }
 const mapStateToProps=state=>{
   return { 
-    calendars: state.calendar.allCalendars
+    calendars: state.calendar.allCalendars,
+    token: state.calendar.access_token
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return{
-    createCalendar:(name)=>dispatch(createCalendar(name)),
-    loadCalendarEvents:(calendarId)=>dispatch(loadEvents(calendarId)),
-    selectCalendar:(calendarId)=>dispatch(selectCalendar(calendarId))
+    createCalendar:(name,token)=>dispatch(createCalendar(name,token)),
+    loadCalendarEvents:(calendarId,token)=>dispatch(loadEvents(calendarId,token)),
+    selectCalendar:(calendarId)=>dispatch(selectCalendar(calendarId)),
+    toggleCalendarList: (isVisible)=>dispatch(toggleCalendarsListVisibility(isVisible)),
   }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(CalendarList);

@@ -2,7 +2,8 @@ const initialState = {
     allCalendars: [],
 
     currentCalendar: '',
-    currentCalendarEvents: []
+    currentCalendarEvents: [],
+    calendarListShow:true
 }
 
 export default function calendar(state = initialState, action) {
@@ -27,7 +28,8 @@ export default function calendar(state = initialState, action) {
             {
                 return {
                     ...state,
-                    allCalendars: [...action.payload]
+                    allCalendars: [...action.payload],
+                    access_token: action.token
                 }
             }
         case 'LOAD_CALENDAR_EVENTS':
@@ -37,6 +39,13 @@ export default function calendar(state = initialState, action) {
                     currentCalendarEvents: [...action.payload]
                 }
             }
+        case 'TOGGLE_CALENDAR':
+          {
+            return{
+              ...state,
+              calendarListShow: action.payload
+            }     
+          }
 
         default:
             return state
