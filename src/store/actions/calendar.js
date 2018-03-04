@@ -105,8 +105,9 @@ export const loadEvents = (calendarId, access_token) => {
                 res = res.data;
                 let calendarEvents = [];
                 let curDate=new Date();
+
                 res.items.forEach(e => { //events
-                  let endDatetime= new Date(e.end.dateTime);
+                  let endDatetime= Date.parse(e.end.dateTime);
                   if(endDatetime>curDate){
                     let event = {
                         name: e.summary,
@@ -117,6 +118,7 @@ export const loadEvents = (calendarId, access_token) => {
                     calendarEvents.push(event);
                   }
                 });
+                calendarEvents.sort((a,b)=>Date.parse(a.start) -Date.parse(b.start));
                 dispatch(saveCalendarEvents(calendarEvents));
             });
     }
