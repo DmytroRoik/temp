@@ -3,6 +3,8 @@ import classes from './RoomManager.css';
 import RoomStatus from '../../components/RoomStatusWidget/RoomStatus';
 import { connect } from 'react-redux';
 import { loadEvents } from '../../store/actions/calendar';
+import EventBuilder from '../EventBuilder/EventBuilder';
+import {toggleEventBuildVisibility} from '../../store/actions/UI';
 
 class RoomManager extends Component{
   constructor(props){
@@ -91,7 +93,8 @@ class RoomManager extends Component{
     return time.getHours() + ":" + (time.getMinutes()<10 ? "0" + time.getMinutes(): time.getMinutes());
   }
   onRoomStatusBtnClickHandler = () =>{
-    alert('create new event');
+    this.props.loadEventBuilder()
+    //alert('create new event');
   }
   render(){
     
@@ -108,6 +111,7 @@ class RoomManager extends Component{
           BtnName={this.state.room.BtnName}
           clicked={this.onRoomStatusBtnClickHandler}
           />
+          <EventBuilder/>
       </div>
     );
   }
@@ -146,7 +150,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return{
-    loadCalenadarEvents: (calendarId,token)=>dispatch(loadEvents(calendarId,token))
+    loadCalenadarEvents: (calendarId,token)=>dispatch(loadEvents(calendarId,token)),
+    loadEventBuilder: ()=>dispatch(toggleEventBuildVisibility(true))
   }
 }
 

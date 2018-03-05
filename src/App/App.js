@@ -20,7 +20,7 @@ class App extends Component {
 }
 const mapStateToProp = state=>{
   return{
-    calendarListShow: state.calendar.calendarListShow
+    calendarListShow: state.UI.calendarListShow
   }
 }
 

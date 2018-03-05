@@ -3,7 +3,8 @@ import classes from './CalendarList.css';
 
 import CalendarItem from '../../components/CalendarItem/CalendarItem';
 import { connect } from 'react-redux';
-import {createCalendar,loadEvents,selectCalendar, toggleCalendarsListVisibility} from '../../store/actions/calendar';
+import {createCalendar,loadEvents,selectCalendar} from '../../store/actions/calendar';
+import {toggleCalendarsListVisibility} from '../../store/actions/UI';
 
 class CalendarList extends Component{
   constructor(props){
@@ -35,6 +36,7 @@ class CalendarList extends Component{
   } 
 
   render(){
+    
     return (
       <div className={classes.CalendarList}>
         <h2>Select Calendars for device:</h2>

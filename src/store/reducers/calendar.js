@@ -3,7 +3,8 @@ const initialState = {
 
     currentCalendar: '',
     currentCalendarEvents: [],
-    calendarListShow:true
+    access_token: ''
+    
 }
 
 export default function calendar(state = initialState, action) {
@@ -39,13 +40,6 @@ export default function calendar(state = initialState, action) {
                     currentCalendarEvents: [...action.payload]
                 }
             }
-        case 'TOGGLE_CALENDAR':
-          {
-            return{
-              ...state,
-              calendarListShow: action.payload
-            }     
-          }
 
         default:
             return state

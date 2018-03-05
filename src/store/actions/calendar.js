@@ -38,15 +38,12 @@ const saveCalendar = calendar => {
         payload: calendar
     }
 }
-
-export const toggleCalendarsListVisibility = isVisible=>{
+const saveEvent = event => {
   return{
-    type:"TOGGLE_CALENDAR",
-    payload: isVisible
+    type: "SAVE_EVENT",
+    payload: event
   }
 }
-
-
 
 export const loadCalendarApi = () => {
     return dispatch => {
@@ -147,5 +144,42 @@ export const createCalendar = (calendarName, access_token) => {
                 }));
             })
     }
+}
 
+/**
+ * add event to google calendar 
+ * @param {object} event -- describe event for calendar
+*  event={
+*   start:"",
+*   end:"",
+*   summary: ""
+*  }
+*  @param {string} calendarId - google calendar id
+*  @param {string} access_token - user token for google api
+ */
+export const createEvent=(event,calendarId,access_token)=>{
+  let data={
+      "start": {
+          "dateTime": Date.parse(event.start).toISOString(),
+          "timeZone": "Europe/Kiev"
+        },
+      "end": {
+          "dateTime": Date.parse(event.end).toISOString(),
+          "timeZone": "Europe/Kiev"
+        },
+        "summary": event.summary
+  },
+  headers={
+      headers: {
+          'Authorization':'Bearer ' + access_token,
+    }
+  }
+  return dispatch=>{
+    axios.post(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`,data,headers)
+    .then(res=>{
+        console.log(res);
+        dispatch(saveEvent({}))
+    })
+  }
+  
 }
