@@ -41,8 +41,7 @@ class RoomManager extends Component{
     });
     }
     let timeToEvent = Date.parse(event.start) - this.state.currentTime;
-    
-    if( Date.parse(event.start) > this.state.currentTime ){
+    if( Date.parse( event.start ) > this.state.currentTime ) {
       if(  timeToEvent > 15 * 60 * 1000 ){
           this.setState({
             room: {
@@ -92,6 +91,17 @@ class RoomManager extends Component{
     let time = new Date(dateTime);
     return time.getHours() + ":" + (time.getMinutes()<10 ? "0" + time.getMinutes(): time.getMinutes());
   }
+
+  /**
+   * @param { number } dateTime -- time in number format 
+   */
+  getTimeString( dateTime ){
+    let minutes = Math.floor( dateTime / 1000 / 60 );
+
+    let h = Math.floor( minutes / 60 );
+    let m = minutes - h * 60;
+    return h + ":" + m;
+  }
   
   onRoomStatusBtnClickHandler = (btnName) =>{
     if ( btnName === 'Quick book for now!' || btnName === 'Quick check-in' ) {
@@ -107,7 +117,7 @@ class RoomManager extends Component{
           eventName={this.state.room.eventName} 
           timeEventBegin={this.state.room.timeStart} 
           timeEventFinish={this.state.room.timeEnd}
-          timeToNextEvent={this.getClock(this.state.timeToNextEvent)} 
+          timeToNextEvent={this.getTimeString(this.state.timeToNextEvent)} 
           description={this.state.room.description} 
           currentTime={this.getClock(this.state.currentTime)} 
           BtnName={this.state.room.BtnName}
@@ -123,7 +133,7 @@ class RoomManager extends Component{
     
     this.timer = setInterval(()=>{// load evetns for calendar from google api every 1 min
       if(that.props.currentCalendar){
-        that.props.loadCalenadarEvents(this.props.currentCalendar,this.props.token);
+         that.props.loadCalenadarEvents(this.props.currentCalendar,this.props.token);
          that.loadCurrentEvent();
       }
       
