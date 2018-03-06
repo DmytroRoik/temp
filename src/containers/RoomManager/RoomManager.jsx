@@ -125,7 +125,7 @@ class RoomManager extends Component{
          that.loadCurrentEvent();
       }
       
-    },60000);
+    },15000);
     
     this.clock=setInterval(()=>{
       let t=new Date();

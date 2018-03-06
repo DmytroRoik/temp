@@ -186,8 +186,15 @@ export const createCalendar = ( calendarName, access_token ) => {
       axios.post(`https://www.googleapis.com/calendar/v3/calendars/${ calendarId }/events`, data,headers )
       .then( res => {
         console.log("res",res);
+          let event={
+            id: res.data.id,
+            description: res.data.description,
+            name: res.data.summary,
+            start: res.data.start.dateTime,
+            end: res.data.end.dateTime
+          }
         //TODO : save event to store
-        dispatch( saveEvent( {} ) );
+        dispatch( saveEvent( event ) );
       })
     }
     

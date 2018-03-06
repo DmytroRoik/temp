@@ -12,42 +12,45 @@ import classes from './RoomStatus.css';
  *  {string} description -  description of current event(author, some about event)
  *  {string} BtnName - name for bottom button
  */
-const roomStatus=(props)=>{
- let statusText="";
- if(props.status==="Available"){statusText=props.status;}
- else if(props.status==="Reserved"){statusText=props.status;}
- else if(props.status==="Busy"){statusText=props.eventName}
+const roomStatus = ( props ) => {
+ let statusText = "";
+ if( props.status === "Available" ) { statusText = props.status; }
+ else if( props.status === "Reserved" ) { statusText = "Available"; }
+ else if( props.status === "Busy" ){statusText=props.eventName}
 
   return (
   <div className={classes.RoomStatus}>
 
-    <div className={classes.header}>
-      <div className={classes.container}>
-        <div className={classes.status}>{statusText}</div>
-        { props.status!=="Available"?
+    <div className = { classes.header + " " +classes[`header-${ props.status }`] }>
+      <div className = { classes.container + " " +classes[`container-${ props.status }`]}>
+        <div className = {classes.status + " " +classes[`status-${ props.status }`]}> {statusText}</div>
+        { props.status === "Busy" ?
           <div>
-            <div className={classes.EventDuration}>
-              {props.timeEventBegin}
+            <div className = { classes.EventDuration }>
+              { props.timeEventBegin }
               <span>-</span>
-              {props.timeEventFinish}
+              { props.timeEventFinish }
             </div>
-            <p>{props.description}</p>
+            <p className = { classes.description }>{props.description}</p>
         </div>
         : <div>
             <div className={classes.EventStart}>
               {'for ' + props.timeToNextEvent.replace(':','h ')+' min' }
             </div>
-            <div className={classes.arrow}>&raquo;</div>
+            <div className={classes.arrow + " " +classes[`arrow-${ props.status }`]}>&raquo;</div>
           </div>
-
         }
        </div>
     </div>
 
-    <div className={classes.footer}>
+    <div className={classes.footer + " " +classes[`footer-${ props.status }`]}>
       <div className={classes.container}>
         <div className={classes.clock}>{props.currentTime}</div>
-        <button onClick={props.clicked} className={classes.btn}>{props.BtnName}</button>  
+        <button onClick={props.clicked} 
+          className={classes.btn + " " +classes[`btn-${ props.status }`] }
+          >
+          {props.BtnName}
+        </button>  
       </div>
     </div>
   </div>
