@@ -92,9 +92,11 @@ class RoomManager extends Component{
     let time = new Date(dateTime);
     return time.getHours() + ":" + (time.getMinutes()<10 ? "0" + time.getMinutes(): time.getMinutes());
   }
-  onRoomStatusBtnClickHandler = () =>{
-    this.props.loadEventBuilder()
-    //alert('create new event');
+  
+  onRoomStatusBtnClickHandler = (btnName) =>{
+    if ( btnName === 'Quick book for now!' || btnName === 'Quick check-in' ) {
+      this.props.loadEventBuilder();
+    }
   }
   render(){
     

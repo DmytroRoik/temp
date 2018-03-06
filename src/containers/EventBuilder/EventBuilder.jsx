@@ -4,6 +4,7 @@ import EventForm from '../../components/CreateEventForm/EventForm';
 import { connect } from 'react-redux';
 import { toggleEventBuildVisibility} from '../../store/actions/UI';
 import { createEvent } from '../../store/actions/calendar';
+import moment from 'moment';
 
 class EventBuilder extends Component{
   constructor ( props ) {
@@ -33,7 +34,7 @@ class EventBuilder extends Component{
     else if ( id === "event-end" )
       this.newEvent.end = dateTime;
 
-    if( this.newEvent.start && this.newEvent.end ){//validation
+    if( this.newEvent.start && this.newEvent.end ) {//validation
       if( this.newEvent.start - this.newEvent.end >= 0) {
         this.setState( {
            errors: {
@@ -48,7 +49,31 @@ class EventBuilder extends Component{
            }
          });
       }
+      let conflictEvents = this.getConflictEvents ( this.newEvent );
+      this.setState( { errors: {
+        conflictEvents : conflictEvents
+      }});
+
     }
+  }
+
+  getConflictEvents = ( event ) =>{
+    let result = this.props.events.filter( (element, index, array) => {
+      let isStartInTheAnotherEvent = moment( event.start ) > moment( element.start ) && moment( event.start ) < moment( element.end );
+      let isEndInTheAnotherEvent = moment( event.end ) > moment( element.start ) && moment( event.end ) < moment( element.end );
+      let isEventCoverAnotherEvent = moment( element.start ) > moment ( event.start ) && moment( element.end ) < moment( event.end );
+      return isStartInTheAnotherEvent || isEndInTheAnotherEvent || isEventCoverAnotherEvent;
+    });
+    return result;
+  } 
+
+  isRoomIsFree = ( event ) => {
+    return !this.props.events.some( ( element, index, array )=>{
+      let isStartInTheAnotherEvent = moment( event.start ) > moment( element.start ) && moment( event.start ) < moment( element.end );
+      let isEndInTheAnotherEvent = moment( event.end ) > moment( element.start ) && moment( event.end ) < moment( element.end );
+      let isEventCoverAnotherEvent = moment( element.start ) > moment ( event.start ) && moment( element.end ) < moment( event.end );
+      return  isStartInTheAnotherEvent || isEndInTheAnotherEvent || isEventCoverAnotherEvent;
+    })
   }
 
   onBtnNextClickHandler = e =>{
@@ -105,7 +130,8 @@ const mapStateToProps = state => {
   return{
     isEventBuilderShown: state.UI.eventBuilderShow,
     token: state.calendar.access_token,
-    calendarId: state.calendar.currentCalendar
+    calendarId: state.calendar.currentCalendar,
+    events: state.calendar.currentCalendarEvents
   }
 }
 const mapDispatchToProps = dispatch => {

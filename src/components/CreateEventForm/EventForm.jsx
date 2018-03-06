@@ -4,6 +4,7 @@ import DateTimePicker from 'material-ui-datetimepicker';
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import  moment  from 'moment';
 /**
  * Use: <EventForm stage="" clickedBack={} clickedNext={} inputedValue={}/>
  * Props:
@@ -78,6 +79,22 @@ const eventForm=(props)=>{
   return(
     <MuiThemeProvider>
       <div className={classes.EventForm}>
+
+        { ( props.error.conflictEvents || [] ).length > 0 ?
+          <div>
+            <h3>Conflicts:</h3>
+            <ol>
+              { ( props.error.conflictEvents || []).map( ev => {
+                  return <li key = { ev.id } >
+                      { ev.name } <br/>
+                      <span> start: {" " + moment( ev.start ).format('lll') } </span>
+                      <span> end: {" " + moment( ev.end ).format('lll')  } </span>
+                    </li>
+              })}
+            </ol>
+          </div>
+        :null
+        }
         {stageForm}
       </div>
   </MuiThemeProvider>

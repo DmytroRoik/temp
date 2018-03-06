@@ -46,7 +46,7 @@ const roomStatus = ( props ) => {
     <div className={classes.footer + " " +classes[`footer-${ props.status }`]}>
       <div className={classes.container}>
         <div className={classes.clock}>{props.currentTime}</div>
-        <button onClick={props.clicked} 
+        <button onClick = { props.clicked( props.BtnName ) } 
           className={classes.btn + " " +classes[`btn-${ props.status }`] }
           >
           {props.BtnName}
