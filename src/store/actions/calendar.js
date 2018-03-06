@@ -12,6 +12,7 @@ export const selectCalendar = ( id ) => {
   }
 }
 
+
 /**
 * Save calendars id to store
 * @param {Array} calendarsId -- Array of calendar`s id
@@ -24,6 +25,51 @@ const createCalendarsList = ( calendarsId, token ) => {
     token: token
   }
 }
+
+const setAvailableRoom = ( timeToEvent ) => {
+  return {
+    type: "SET_AVAILABLE_ROOM",
+    payload: {
+      status: 'Available',
+      timeStart: '',
+      eventName:'',
+      description:'',
+      timeEnd:'',
+      BtnName:'Quick book for now!',
+      timeToNextEvent: timeToEvent
+   }
+  }
+}
+
+const setReservedRoom = ( timeToEvent ) =>{
+  return {
+    type: "SET_RESERVED_ROOM",
+    payload: {
+      status:'Reserved',
+      timeStart: '',
+      BtnName: 'Quick check-in',
+      eventName:'',
+      description:'',
+      timeEnd:'',
+      timeToNextEvent: timeToEvent
+    }
+  }
+}
+
+const setBusyRoom = ( event, timeStart, timeEnd ) =>{
+  return {
+    type: "SET_BUSY_ROOM",
+    payload: {
+      status: 'Busy',
+      eventName: event.name,
+      description: 'description',
+      timeStart: timeStart,
+      timeEnd:  timeEnd,
+      BtnName: 'View'
+    },
+  }
+}
+
 
 const saveCalendarEvents = ( events ) => {
   return {
@@ -95,6 +141,33 @@ const initClient = () => {
   }
 }
 
+
+export const loadCurrentEvent = ( event ) => {
+  return dispatch => {
+    let currentTime = new Date().valueOf();
+    if( !event ) {
+      dispatch( setAvailableRoom( " - " ) );
+    }
+    else{
+      let timeToEvent = Date.parse( event.start ) - currentTime;
+      
+      if( Date.parse( event.start ) > currentTime ) {
+        if(  timeToEvent > 15 * 60 * 1000 ) {
+          dispatch( setAvailableRoom( timeToEvent ) );
+        }
+        else{
+          dispatch( setReservedRoom( timeToEvent ) );
+        }
+      }
+      else{
+          let timeStart = Date.parse( event.start );
+          let timeEnd = Date.parse( event.end );
+          dispatch( setBusyRoom( event, timeStart, timeEnd ) );
+        }
+    }  
+    }
+}
+
 /**
 * Load future events for special calendar
 * @param {string} calendarId - id of google calendar
@@ -122,7 +195,8 @@ export const loadEvents = ( calendarId, access_token ) => {
         }
       });
       calendarEvents.sort( ( a, b ) => Date.parse( a.start ) - Date.parse( b.start ) );
-      dispatch(saveCalendarEvents( calendarEvents ) );
+      dispatch( saveCalendarEvents( calendarEvents ) );
+      dispatch( loadCurrentEvent( calendarEvents[0] ) );
     });
   }
 }

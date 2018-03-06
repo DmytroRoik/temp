@@ -3,7 +3,16 @@ const initialState = {
 
     currentCalendar: '',
     currentCalendarEvents: [],
-    access_token: ''
+    access_token: '',
+    room: {
+      status: 'Available',
+      timeStart: '',
+      eventName:'',
+      description:'',
+      timeEnd:'',
+      BtnName:'Quick book for now!',
+      timeToNextEvent: ' - '
+   }
     
 }
 
@@ -33,13 +42,28 @@ export default function calendar(state = initialState, action) {
                     access_token: action.token
                 }
             }
-        case 'LOAD_CALENDAR_EVENTS':
+        case 'SET_AVAILABLE_ROOM':
             {
                 return {
                     ...state,
-                    currentCalendarEvents: [...action.payload]
+                    room: { ...action.payload}
                 }
             }
+        case 'SET_RESERVED_ROOM':
+            {
+                return {
+                    ...state,
+                    room: { ...action.payload}
+                }
+            }
+        case 'SET_BUSY_ROOM':
+            {
+                return {
+                    ...state,
+                    room: { ...action.payload}
+                }
+            }
+
 
         default:
             return state
