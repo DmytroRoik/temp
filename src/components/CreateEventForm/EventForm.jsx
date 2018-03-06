@@ -1,6 +1,9 @@
 import React from 'react';
 import classes from './EventForm.css';
-
+import DateTimePicker from 'material-ui-datetimepicker';
+import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
+import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 /**
  * Use: <EventForm stage="" clickedBack={} clickedNext={} inputedValue={}/>
  * Props:
@@ -52,6 +55,7 @@ const eventForm=(props)=>{
     }
   }
   return(
+    <MuiThemeProvider>
   <div className={classes.EventForm}>
     <label 
       htmlFor={ComponentFormAttribute.inputFirst.id}>
@@ -73,9 +77,21 @@ const eventForm=(props)=>{
       id={ ComponentFormAttribute.inputSecond.id }
       placeholder={ComponentFormAttribute.inputSecond.placeholder }
       onInput={props.inputedValue} />
+       <DateTimePicker 
+        returnMomentDate={true}
+        onChange={(datetime)=>{
+          debugger;
+        }}
+        id="event-start"
+        floatingLabelText="Get my date"
+        DatePicker={DatePickerDialog}
+        TimePicker={TimePickerDialog}
+        textFieldClassName='datetime-input event-start'
+      />
 
     <button onClick={props.clickedBack}>{ComponentFormAttribute.BtnPrevText}</button>
     <button onClick={props.clickedNext}>{ComponentFormAttribute.BtnNextText}</button>
   </div>
+  </MuiThemeProvider>
 );}
 export default eventForm;
