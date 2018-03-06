@@ -9,41 +9,82 @@ class EventBuilder extends Component{
   constructor ( props ) {
     super ( props );
     this.state = {
-      stage: 1
+      stage: 1,
+      errors: {}
     }
     this.newEvent = {};
   }
 
   onInputHandler=(e)=>{
-    if ( e.target.id === "eventNameInput" ) 
+    if ( e.target.id === "eventNameInput" ) {
       this.newEvent.summary = e.target.value;
+    }
     else if ( e.target.id === "eventDescriptionInput" )
       this.newEvent.description = e.target.value;
   }
 
   /**
    * @param { string } id --id of parent`s input element
-   * @param { string } dateTime -- date and time in ISO format 
+   * @param { moment } dateTime -- date and time in moment object 
    */
   onChangeDateTimeHandler = ( id, dateTime ) => {
     if ( id === "event-start" )
       this.newEvent.start = dateTime;
     else if ( id === "event-end" )
       this.newEvent.end = dateTime;
+
+    if( this.newEvent.start && this.newEvent.end ){//validation
+      if( this.newEvent.start - this.newEvent.end >= 0) {
+        this.setState( {
+           errors: {
+            eventEnd: "The event has start faster than the end!"
+            }
+          });
+      }
+      else {
+        this.setState( {
+          errors: {
+            eventEnd: null
+           }
+         });
+      }
+    }
   }
-  onBtnNextClickHandler=(e)=>{
-    if(this.state.stage===1)this.setState({stage: 2});
+
+  onBtnNextClickHandler = e =>{
+    if( this.state.stage===1 ){
+      if ( this.newEvent.summary ){
+        this.setState( { stage: 2 } );
+        this.setState( { errors: {} } );
+      } 
+      else{
+        this.setState( { errors: {
+         summary: "event name is required"
+        }
+      })
+      } 
+    }
     else {
-      this.props.crateCalendarEvent ( this.newEvent, this.props.calendarId, this.props.token );
+      let isTimePresent = this.newEvent.start && this.newEvent.end;
+      if( this.newEvent.summary && isTimePresent ) {
+        this.props.createCalendarEvent ( this.newEvent, this.props.calendarId, this.props.token );
+        this.setState( { stage: 1 } );
+        this.props.hideEventBuilder();
+      }
+      
+    }
+  }
+
+  onBtnPrevClickHandler = e => {
+    if ( this.state.stage === 2 ) {
+      this.setState ( { stage: 1 } );
+    }
+    else {
+      this.setState( { errors: {} });//clear errors
       this.props.hideEventBuilder();
     }
   }
-  onBtnPrevClickHandler = ( e ) => {
-    if ( this.state.stage === 2 ) this.setState ( { stage: 1 } );
-    else {
-      this.props.hideEventBuilder();
-    }
-  }
+
   render() {
     if ( !this.props.isEventBuilderShown ) return null;
     return (
@@ -54,8 +95,8 @@ class EventBuilder extends Component{
           clickedNext = { this.onBtnNextClickHandler }
           inputedValue = { this.onInputHandler } 
           changeDateTime = {this.onChangeDateTimeHandler } 
+          error = { this.state.errors }
           />
-
       </div>
     );
   }
@@ -70,7 +111,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     hideEventBuilder: () => dispatch ( toggleEventBuildVisibility ( false ) ),
-    crateCalendarEvent: ( event, calendarId, access_token ) => dispatch ( createEvent ( event,calendarId, access_token ) )
+    createCalendarEvent: ( event, calendarId, access_token ) => dispatch ( createEvent ( event,calendarId, access_token ) )
   }
 }
 export default connect ( mapStateToProps, mapDispatchToProps ) ( EventBuilder );

@@ -17,16 +17,22 @@ const eventForm=(props)=>{
   if( props.stage == "1" ) {
     stageForm = (
       <div>
-        <label 
-          htmlFor="eventNameInput" >
-          Event name:
-        </ label >
-        < input 
-          type ="text" 
-          id = "eventNameInput" 
-          placeholder = "Enter event name"
-          onInput = { props.inputedValue }
-          />
+        <div>
+          <label 
+            htmlFor="eventNameInput" >
+            Event name:
+          </ label >
+          < input 
+            type ="text" 
+            id = "eventNameInput"
+            placeholder = "Enter event name"
+            onInput = { props.inputedValue }
+            />
+          { props.error.summary ?
+            <div className = { classes.error } > { props.error.summary } </div>
+          : null
+          }
+        </div>
 
         <label 
           htmlFor = "eventDescriptionInput" >
@@ -48,19 +54,21 @@ const eventForm=(props)=>{
       <div>
          <DateTimePicker 
           returnMomentDate = { true }
-          onChange = { (dateTime) => props.changeDateTime( "event-start", dateTime.format() ) }
+          onChange = { (dateTime) => props.changeDateTime( "event-start", dateTime ) }
           id = "event-start"
           floatingLabelText = "Event start"
           DatePicker = { DatePickerDialog }
           TimePicker = { TimePickerDialog }
+          errorText = { props.error.eventEnd }
         />
            < DateTimePicker 
             returnMomentDate = { true }
-            onChange = { (dateTime) => props.changeDateTime( "event-end", dateTime.format() ) }
+            onChange = { (dateTime) => props.changeDateTime( "event-end", dateTime ) }
             id = "event-end"
             floatingLabelText = "Event end"
             DatePicker = { DatePickerDialog }
             TimePicker = { TimePickerDialog }
+            errorText = { props.error.eventEnd }
         />
         <button onClick = { props.clickedBack } > Back </button>
         <button onClick ={ props.clickedNext } > Create </button>

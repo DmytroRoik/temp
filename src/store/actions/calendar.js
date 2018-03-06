@@ -167,15 +167,15 @@ export const createCalendar = ( calendarName, access_token ) => {
   export const createEvent = ( event,calendarId, access_token ) => {
     let data = {
       "start": {
-        "dateTime": event.start,
+        "dateTime": event.start.format(),
         "timeZone": "Europe/Kiev"
       },
       "end": {
-        "dateTime": event.end,
+        "dateTime": event.end.format(),
         "timeZone": "Europe/Kiev"
       },
       "description": event.description,
-      "summary": event.summary
+      "summary": event.summary || ""
     },
     headers={
       headers: {
@@ -185,7 +185,7 @@ export const createCalendar = ( calendarName, access_token ) => {
     return dispatch => {
       axios.post(`https://www.googleapis.com/calendar/v3/calendars/${ calendarId }/events`, data,headers )
       .then( res => {
-        console.log(res);
+        console.log("res",res);
         //TODO : save event to store
         dispatch( saveEvent( {} ) );
       })
