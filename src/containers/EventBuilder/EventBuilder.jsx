@@ -89,10 +89,9 @@ class EventBuilder extends Component{
     }
     else {
       let isTimePresent = this.newEvent.start && this.newEvent.end;
-      let isErrorPresent = this.state.errors.eventEnd ||  this.state.errors.conflictEvents.length!==0;
   
       if( this.newEvent.summary && isTimePresent ) {
-        if( isErrorPresent ){
+        if( this.state.errors.eventEnd || this.state.errors.conflictEvents.length!==0 ) {
           alert( 'Room will be busy in this time\n Please select another time');
           return;
         }
@@ -100,6 +99,7 @@ class EventBuilder extends Component{
         this.setState( { stage: 1 } );
         this.props.hideEventBuilder();
       }
+      else alert( 'Please fill all required fields! ')
       
     }
   }
