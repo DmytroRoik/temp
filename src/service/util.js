@@ -5,6 +5,8 @@
    */
   export const getClock = dateTime => {
     let time = new Date(dateTime);
+    console.log("time"+ +time);
+    if( isNaN(time) ) return "";
     return time.getHours() + ":" + (time.getMinutes()<10 ? "0" + time.getMinutes(): time.getMinutes());
   }
 
@@ -17,5 +19,7 @@
 
     let h = Math.floor( minutes / 60 );
     let m = minutes - h * 60;
+    h = isNaN(h) ? "- " : h;
+    m = isNaN(m) ? "-" : m;
     return h + ":" + m;
   }

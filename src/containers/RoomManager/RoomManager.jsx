@@ -21,8 +21,8 @@ class RoomManager extends Component{
       this.props.loadEventBuilder();
     }
   }
+
   render(){
-    
     return (
       <div className = { classes.RoomManager } >
         <RoomStatus 
@@ -43,7 +43,7 @@ class RoomManager extends Component{
   componentDidMount() {
     const that = this;
     
-    this.timer = setInterval( () =>{// load evetns for calendar from google api every 1 min
+    this.timer = setInterval( () =>{// load evetns for calendar from google api every 30sec
       if( that.props.currentCalendar ) {
          that.props.loadCalenadarEvents( this.props.currentCalendar, this.props.token );
       }
@@ -54,6 +54,7 @@ class RoomManager extends Component{
       if(that.state.currentTime !==t ) {
           this.setState({ currentTime: t});
         }
+        this.props.loadCurrentState( this.props.events[0] );
     },1000);
   }
   componentWillUnmount() {
@@ -75,7 +76,7 @@ const mapDispatchToProps = dispatch => {
   return {
     loadCalenadarEvents: (calendarId,token)=>dispatch(loadEvents( calendarId, token ) ),
     loadEventBuilder: ()=>dispatch( toggleEventBuildVisibility( true ) ),
-    loadCurrentState: ( event, curTime ) => dispatch ( loadCurrentEvent( event, curTime ) )
+    loadCurrentState: ( event) => dispatch ( loadCurrentEvent( event ) )
   }
 }
 

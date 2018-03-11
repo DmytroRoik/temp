@@ -52,7 +52,9 @@ justify-content: center;
 .EventStart{
   font-size: 30px;
   margin-top: -10px;
+  text-align: left;
 }
+
 .arrow{
   color: rgb(4,118,2);
   font-size: 132px;

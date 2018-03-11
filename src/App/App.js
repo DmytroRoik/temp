@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CalendarList from '../containers/Calendars/CalendarsList';
 import { connect } from 'react-redux';
-import{loadCalendarApi} from '../store/actions/calendar';
+import { loadCalendarApi } from '../store/actions/calendar';
 import RoomManager from '../containers/RoomManager/RoomManager';
 import EventBuilder from '../containers/EventBuilder/EventBuilder';
 
@@ -16,8 +16,6 @@ class App extends Component {
           this.props.eventBuilderShow?
           <EventBuilder/>:null
         }
-        
-        
       </div>
     );
   }

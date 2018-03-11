@@ -91,7 +91,28 @@ const saveEvent = event => {
   }
 }
 
-export const loadCalendarApi = () => {
+const loadCalendarsFromGoogle = (access_token) =>{
+  return dispatch => {
+    axios.get( `https://www.googleapis.com/calendar/v3/users/me/calendarList?access_token=${ access_token }` )
+    .then(res => {
+      res = res.data.items;
+      let calendars = [];
+      res.forEach(element => {
+        if (element.accessRole === "owner")
+        calendars.push({
+          id: element.id,
+          name: element.summary
+        });
+      });
+      dispatch( createCalendarsList( calendars, access_token ));
+    })
+    .catch( error => {
+      console.log(error.message)
+    });
+}
+}
+
+export const loadCalendarApi = () => {//should rewrite for cordova
   return dispatch => {
     const script = document.createElement( "script" );
     script.src = "https://apis.google.com/js/api.js";
@@ -103,7 +124,8 @@ export const loadCalendarApi = () => {
   }
 }
 
-const initClient = () => {
+
+const initClient = () => {//should rewrite for cordova
   return dispatch => {
     window.gapi.client.init( {
       apiKey: config.API_KEY,
@@ -115,24 +137,8 @@ const initClient = () => {
       window.gapi.auth2.getAuthInstance()
       .signIn()
       .then( function (arg) {
-        console.log(arg)
         let access_token = arg.Zi.access_token;
-        axios.get( `https://www.googleapis.com/calendar/v3/users/me/calendarList?access_token=${ access_token }` )
-        .then(res => {
-          res = res.data.items;
-          let calendars = [];
-          res.forEach(element => {
-            if (element.accessRole === "owner")
-            calendars.push({
-              id: element.id,
-              name: element.summary
-            });
-          });
-          dispatch( createCalendarsList( calendars, access_token ));
-        })
-        .catch( error => {
-          console.log(error.message)
-        });
+        dispatch( loadCalendarsFromGoogle(access_token ));
       },
       function( error ) { 
         if ( error ) alert( 'please allow popup for this app' )
@@ -141,7 +147,11 @@ const initClient = () => {
   }
 }
 
-
+ 
+/**
+ * Load current event from store and update room status
+ * @param {object} event first event from list 
+ */
 export const loadCurrentEvent = ( event ) => {
   return dispatch => {
     let currentTime = new Date().valueOf();
@@ -196,7 +206,6 @@ export const loadEvents = ( calendarId, access_token ) => {
       });
       calendarEvents.sort( ( a, b ) => Date.parse( a.start ) - Date.parse( b.start ) );
       dispatch( saveCalendarEvents( calendarEvents ) );
-      dispatch( loadCurrentEvent( calendarEvents[0] ) );
     });
   }
 }
@@ -233,7 +242,8 @@ export const createCalendar = ( calendarName, access_token ) => {
 *  event={
   *   start:"",
   *   end:"",
-  *   summary: ""
+  *   summary: "",
+  *   description: ""
   *  }
   *  @param {string} calendarId - google calendar id
   *  @param {string} access_token - user token for google api
@@ -259,7 +269,6 @@ export const createCalendar = ( calendarName, access_token ) => {
     return dispatch => {
       axios.post(`https://www.googleapis.com/calendar/v3/calendars/${ calendarId }/events`, data,headers )
       .then( res => {
-        console.log("res",res);
           let event={
             id: res.data.id,
             description: res.data.description,
@@ -267,7 +276,6 @@ export const createCalendar = ( calendarName, access_token ) => {
             start: res.data.start.dateTime,
             end: res.data.end.dateTime
           }
-        //TODO : save event to store
         dispatch( saveEvent( event ) );
       })
     }
