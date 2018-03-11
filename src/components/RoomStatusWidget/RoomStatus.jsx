@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from './RoomStatus.css';
+import  './RoomStatus.css';
 
 /**
  * Use: <RoomStatus status="" eventName="" timeEventBegin="" timeEventFinish="" description="" currentTime="" timeToNextEvent="" clicked={} BtnName="" />
@@ -19,37 +19,38 @@ const roomStatus = ( props ) => {
  else if( props.status === "Busy" ){statusText=props.eventName}
 
   return (
-  <div className={classes.RoomStatus}>
+  <div className = "RoomStatus" >
 
-    <div className = { classes.header + " " +classes[`header-${ props.status }`] }>
-      <div className = { classes.container + " " +classes[`container-${ props.status }`]}>
-        <div className = {classes.status + " " +classes[`status-${ props.status }`]}> {statusText}</div>
+    <div className = { `header header-${ props.status }`} >
+      <div className =  { `container container-${ props.status }`} >
+        <div className = { `status status-${ props.status }`} > {statusText}</div>
         { props.status === "Busy" ?
           <div>
-            <div className = { classes.EventDuration }>
+            <div className = "EventDuration" >
               { props.timeEventBegin }
               <span>-</span>
               { props.timeEventFinish }
             </div>
-            <p className = { classes.description }>{props.description}</p>
+            <p className = "description" > { props.description } </p>
         </div>
         : <div>
-            <div className={classes.EventStart}>
+            <div className = "EventStart" >
               {'for ' + props.timeToNextEvent.replace(':','h ')+' min' }
             </div>
-            <div className={classes.arrow + " " +classes[`arrow-${ props.status }`]}>&raquo;</div>
+            <div className = { `arrow arrow-${ props.status }`} > &raquo; </div>
           </div>
         }
        </div>
     </div>
 
-    <div className={classes.footer + " " +classes[`footer-${ props.status }`]}>
-      <div className={classes.container}>
-        <div className={classes.clock}>{props.currentTime}</div>
-        <button onClick = { props.clicked( props.BtnName ) } 
-          className={classes.btn + " " +classes[`btn-${ props.status }`] }
+    <div className = { `footer footer-${ props.status }`} >
+      <div className = "container" >
+        <div className = "clock" > { props.currentTime } </div>
+        <button 
+          onClick = { props.clicked( props.BtnName ) } 
+          className = { `btn btn-${ props.status }`}
           >
-          {props.BtnName}
+          { props.BtnName }
         </button>  
       </div>
     </div>

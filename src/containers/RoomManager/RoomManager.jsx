@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { loadEvents, loadCurrentEvent } from '../../store/actions/calendar';
 import EventBuilder from '../EventBuilder/EventBuilder';
 import {toggleEventBuildVisibility} from '../../store/actions/UI';
+import { getClock, getTimeString } from '../../service/util';
 
 class RoomManager extends Component{
   constructor(props){
@@ -14,27 +15,6 @@ class RoomManager extends Component{
     }
     this.timer=null;
     this.clock=null;
-  }
-
-  /**
-   * Convert integer time to hh:mm format
-   * @param {integer} dateTime - time in integer format
-   * @returns {string} - time in hh:mm format 
-   */
-  getClock(dateTime){
-    let time = new Date(dateTime);
-    return time.getHours() + ":" + (time.getMinutes()<10 ? "0" + time.getMinutes(): time.getMinutes());
-  }
-
-  /**
-   * @param { number } dateTime -- time in number format 
-   */
-  getTimeString( dateTime ){
-    let minutes = Math.floor( dateTime / 1000 / 60 );
-
-    let h = Math.floor( minutes / 60 );
-    let m = minutes - h * 60;
-    return h + ":" + m;
   }
   
   onRoomStatusBtnClickHandler = (btnName) =>{
@@ -49,11 +29,11 @@ class RoomManager extends Component{
         <RoomStatus 
           status = { this.props.room.status } 
           eventName = { this.props.room.eventName } 
-          timeEventBegin = { this.getClock( this.props.room.timeStart ) } 
-          timeEventFinish = { this.getClock( this.props.room.timeEnd ) }
-          timeToNextEvent = { this.getTimeString( this.props.room.timeToNextEvent) } 
+          timeEventBegin = { getClock( this.props.room.timeStart ) } 
+          timeEventFinish = { getClock( this.props.room.timeEnd ) }
+          timeToNextEvent = { getTimeString( this.props.room.timeToNextEvent) } 
           description = { this.props.room.description } 
-          currentTime = { this.getClock( this.state.currentTime ) } 
+          currentTime = { getClock( this.state.currentTime ) } 
           BtnName = { this.props.room.BtnName }
           clicked = { this.onRoomStatusBtnClickHandler }
           />

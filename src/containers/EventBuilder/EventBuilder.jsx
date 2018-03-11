@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import classes from './EventBuilder.css';
+import './EventBuilder.css';
+
 import EventForm from '../../components/CreateEventForm/EventForm';
 import { connect } from 'react-redux';
-import { toggleEventBuildVisibility} from '../../store/actions/UI';
+import { toggleEventBuildVisibility } from '../../store/actions/UI';
 import { createEvent } from '../../store/actions/calendar';
 import moment from 'moment';
 
@@ -113,7 +114,7 @@ class EventBuilder extends Component{
   render() {
     if ( !this.props.isEventBuilderShown ) return null;
     return (
-      <div className = { classes.EventBuilder } >
+      <div className = "EventBuilder" >
         <EventForm 
           stage = {this.state.stage} 
           clickedBack = { this.onBtnPrevClickHandler } 

@@ -1,10 +1,13 @@
 import React from 'react';
-import classes from './EventForm.css';
+import './EventForm.css';
+
 import DateTimePicker from 'material-ui-datetimepicker';
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import  moment  from 'moment';
+
+
 /**
  * Use: <EventForm stage="" clickedBack={} clickedNext={} inputedValue={}/>
  * Props:
@@ -30,7 +33,7 @@ const eventForm=(props)=>{
             onInput = { props.inputedValue }
             />
           { props.error.summary ?
-            <div className = { classes.error } > { props.error.summary } </div>
+            <div className =  "error"  > { props.error.summary } </div>
           : null
           }
         </div>
@@ -78,7 +81,7 @@ const eventForm=(props)=>{
     }
   return(
     <MuiThemeProvider>
-      <div className={classes.EventForm}>
+      <div className = "EventForm" >
 
         { ( props.error.conflictEvents || [] ).length > 0 ?
           <div>
