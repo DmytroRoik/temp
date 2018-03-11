@@ -112,7 +112,6 @@ class EventBuilder extends Component{
   }
 
   render() {
-    if ( !this.props.isEventBuilderShown ) return null;
     return (
       <div className = "EventBuilder" >
         <EventForm 
@@ -129,7 +128,6 @@ class EventBuilder extends Component{
 }
 const mapStateToProps = state => {
   return{
-    isEventBuilderShown: state.UI.eventBuilderShow,
     token: state.calendar.access_token,
     calendarId: state.calendar.currentCalendar,
     events: state.calendar.currentCalendarEvents

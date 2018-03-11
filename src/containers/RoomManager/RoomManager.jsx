@@ -3,7 +3,6 @@ import classes from './RoomManager.css';
 import RoomStatus from '../../components/RoomStatusWidget/RoomStatus';
 import { connect } from 'react-redux';
 import { loadEvents, loadCurrentEvent } from '../../store/actions/calendar';
-import EventBuilder from '../EventBuilder/EventBuilder';
 import {toggleEventBuildVisibility} from '../../store/actions/UI';
 import { getClock, getTimeString } from '../../service/util';
 
@@ -35,9 +34,8 @@ class RoomManager extends Component{
           description = { this.props.room.description } 
           currentTime = { getClock( this.state.currentTime ) } 
           BtnName = { this.props.room.BtnName }
-          clicked = { this.onRoomStatusBtnClickHandler }
+          clicked = { () => this.onRoomStatusBtnClickHandler( this.props.room.BtnName ) }
           />
-          <EventBuilder/>
       </div>
     );
   }

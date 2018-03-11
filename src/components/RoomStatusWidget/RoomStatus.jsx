@@ -47,7 +47,7 @@ const roomStatus = ( props ) => {
       <div className = "container" >
         <div className = "clock" > { props.currentTime } </div>
         <button 
-          onClick = { props.clicked( props.BtnName ) } 
+          onClick = { props.clicked } 
           className = { `btn btn-${ props.status }`}
           >
           { props.BtnName }

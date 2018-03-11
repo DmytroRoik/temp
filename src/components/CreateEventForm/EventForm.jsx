@@ -21,7 +21,7 @@ const eventForm=(props)=>{
   if( props.stage == "1" ) {
     stageForm = (
       <div>
-        <div>
+        <div className = "inputFileds" >
           <label 
             htmlFor="eventNameInput" >
             Event name:
@@ -37,25 +37,31 @@ const eventForm=(props)=>{
           : null
           }
         </div>
-
-        <label 
-          htmlFor = "eventDescriptionInput" >
-          Event description:
-        </label>
-        <input 
-          type = "text" 
-          id = "eventDescriptionInput"
-          placeholder = "author or extra info(optional)"
-          onInput = {props.inputedValue} />
-
-        <button onClick = {props.clickedBack} > Cancel </button>
-        <button onClick = {props.clickedNext}> Next </button>
+        <div className = "inputFileds">
+          <label 
+            htmlFor = "eventDescriptionInput" >
+            Event description:
+          </label>
+          <input 
+            type = "text" 
+            id = "eventDescriptionInput"
+            placeholder = "author or extra info(optional)"
+            onInput = {props.inputedValue} />
+        </div>
+        <button 
+          onClick = {props.clickedBack} 
+          className = "btn btn-Prev"
+          > Cancel </button>
+        <button 
+          onClick = { props.clickedNext }
+          className = "btn btn-Next"
+          > Next </button>
       </div>
     );
   }
   else if( props.stage == "2" ) {
     stageForm=(
-      <div>
+      <div className = "inputFileds" >
          <DateTimePicker 
           returnMomentDate = { true }
           onChange = { (dateTime) => props.changeDateTime( "event-start", dateTime ) }
@@ -74,8 +80,16 @@ const eventForm=(props)=>{
             TimePicker = { TimePickerDialog }
             errorText = { props.error.eventEnd }
         />
-        <button onClick = { props.clickedBack } > Back </button>
-        <button onClick ={ props.clickedNext } > Create </button>
+        <div>
+          <button 
+            onClick = { props.clickedBack } 
+            className = "btn btn-Prev"
+            > Back </button>
+          <button 
+            onClick = { props.clickedNext } 
+            className = "btn btn-Next"
+            > Create </button>
+        </div>
       </div>
     );
     }
@@ -84,11 +98,13 @@ const eventForm=(props)=>{
       <div className = "EventForm" >
 
         { ( props.error.conflictEvents || [] ).length > 0 ?
-          <div>
+          <div className = "conflicts" >
             <h3>Conflicts:</h3>
-            <ol>
+            <ol className = "conflicts-container" >
               { ( props.error.conflictEvents || []).map( ev => {
-                  return <li key = { ev.id } >
+                  return <li 
+                      className = "conflicts-item"
+                      key = { ev.id } >
                       { ev.name } <br/>
                       <span> start: {" " + moment( ev.start ).format('lll') } </span>
                       <span> end: {" " + moment( ev.end ).format('lll')  } </span>

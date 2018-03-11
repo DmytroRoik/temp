@@ -1,6 +1,6 @@
 const initialState = {
-  calendarListShow:true,
-  eventBuilderShow:false
+  calendarListShow: true,
+  eventBuilderShow: false
 }
 
 export default function calendar(state = initialState, action) {
