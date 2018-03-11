@@ -36,24 +36,21 @@ class EventBuilder extends Component{
       this.newEvent.end = dateTime;
 
     if( this.newEvent.start && this.newEvent.end ) {//validation
+      let errors = {...this.state.errors};
+
       if( this.newEvent.start - this.newEvent.end >= 0) {
+        errors.eventEnd = "The event has start faster than the end!";
         this.setState( {
-           errors: {
-            eventEnd: "The event has start faster than the end!"
-            }
+           errors: errors
           });
       }
       else {
-        this.setState( {
-          errors: {
-            eventEnd: null
-           }
-         });
+        errors.eventEnd = null
+        this.setState( { errors: errors });
       }
       let conflictEvents = this.getConflictEvents ( this.newEvent );
-      this.setState( { errors: {
-        conflictEvents : conflictEvents
-      }});
+      errors.conflictEvents = conflictEvents;
+      this.setState( { errors: errors } );
 
     }
   }
@@ -92,7 +89,13 @@ class EventBuilder extends Component{
     }
     else {
       let isTimePresent = this.newEvent.start && this.newEvent.end;
+      let isErrorPresent = this.state.errors.eventEnd ||  this.state.errors.conflictEvents.length!==0;
+  
       if( this.newEvent.summary && isTimePresent ) {
+        if( isErrorPresent ){
+          alert( 'Room will be busy in this time\n Please select another time');
+          return;
+        }
         this.props.createCalendarEvent ( this.newEvent, this.props.calendarId, this.props.token );
         this.setState( { stage: 1 } );
         this.props.hideEventBuilder();

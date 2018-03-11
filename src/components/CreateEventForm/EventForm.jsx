@@ -9,7 +9,7 @@ import  moment  from 'moment';
 
 
 /**
- * Use: <EventForm stage="" clickedBack={} clickedNext={} inputedValue={}/>
+ * Use: <EventForm stage="" clickedBack={} clickedNext={} inputedValue={} error={}/>
  * Props:
  *  - stage {number} - 1: display description and event name, 2: display event time
  *  
@@ -80,7 +80,7 @@ const eventForm=(props)=>{
             TimePicker = { TimePickerDialog }
             errorText = { props.error.eventEnd }
         />
-        <div>
+        <div className = "buttons" >
           <button 
             onClick = { props.clickedBack } 
             className = "btn btn-Prev"
@@ -92,7 +92,7 @@ const eventForm=(props)=>{
         </div>
       </div>
     );
-    }
+  }
   return(
     <MuiThemeProvider>
       <div className = "EventForm" >
@@ -105,9 +105,10 @@ const eventForm=(props)=>{
                   return <li 
                       className = "conflicts-item"
                       key = { ev.id } >
-                      { ev.name } <br/>
-                      <span> start: {" " + moment( ev.start ).format('lll') } </span>
-                      <span> end: {" " + moment( ev.end ).format('lll')  } </span>
+                      <span className = "conflicts-item-name" >{ ev.name } </span>
+                      <br/>
+                      <span className = "conflicts-item-time"> start: {" " + moment( ev.start ).format('lll') } </span>
+                      <span className = "conflicts-item-time"> end: {" " + moment( ev.end ).format('lll')  } </span>
                     </li>
               })}
             </ol>

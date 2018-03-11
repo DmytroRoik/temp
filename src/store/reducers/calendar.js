@@ -63,7 +63,13 @@ export default function calendar(state = initialState, action) {
                     room: { ...action.payload}
                 }
             }
-
+        case 'LOAD_CALENDAR_EVENTS':
+            {
+              return{
+                  ...state,
+                  currentCalendarEvents: [...action.payload]   
+              }
+            }
 
         default:
             return state

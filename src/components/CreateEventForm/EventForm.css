@@ -30,9 +30,11 @@ input#event-end {
   color:white!important;
   font-size: 25px;
 }
+.inputFileds .datetime-container{
+  margin-top:10px;
+}
 .datetime-container svg {
   color: red!important;
-  
 }
 .btn{
   padding: 10px 15px;
@@ -48,6 +50,9 @@ input#event-end {
 .btn-Prev{
   background-color: #80002e;
 }
+.buttons{
+  margin: 30px 0px;
+}
 .conflicts{
   
 }
@@ -56,6 +61,14 @@ input#event-end {
 }
 .conflicts-item{
   
+}
+.conflicts-item-name{
+  color: blue;
+  font-weight: bold;
+}
+.conflicts-item-time{
+  font-size: 18px;
+  display: block;
 }
 .error{
   color: red;
