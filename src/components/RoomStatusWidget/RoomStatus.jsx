@@ -18,6 +18,11 @@ const roomStatus = ( props ) => {
  else if( props.status === "Reserved" ) { statusText = "Available"; }
  else if( props.status === "Busy" ){statusText=props.eventName}
 
+ let timeToEvent = "";
+  if( props.timeToNextEvent === "0:0" ) timeToEvent = "less than 1 minute";
+  else if( props.timeToNextEvent === "- :-" ) timeToEvent = "no planned events";
+  else timeToEvent = 'for ' + props.timeToNextEvent.replace(':','h ')+' min';
+
   return (
   <div className = "RoomStatus" >
 
@@ -35,7 +40,7 @@ const roomStatus = ( props ) => {
         </div>
         : <div>
             <div className = "EventStart" >
-              {'for ' + props.timeToNextEvent.replace(':','h ')+' min' }
+              { timeToEvent }
             </div>
             <div className = { `arrow arrow-${ props.status }`} > &raquo; </div>
           </div>

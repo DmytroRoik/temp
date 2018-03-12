@@ -73,15 +73,19 @@ export default function calendar(state = initialState, action) {
         case 'SAVE_EVENT':
             {
               let events = [...state.currentCalendarEvents];
-
-              let eventDateFirstEvent = Date.parse( events[0].end.dateTime );
-              let eventDate = Date.parse(action.payload.end.dateTime);
-
-              if( eventDate > eventDateFirstEvent){
+              if( events.length === 0 ){
                 events.push(action.payload);
               }
-              else{
-                events.splice( 0, 0, action.payload );
+              else {
+                let eventDateFirstEvent = Date.parse( events[0].end.dateTime );
+                let eventDate = Date.parse(action.payload.end.dateTime);
+
+                if( eventDate > eventDateFirstEvent){
+                  events.push(action.payload);
+                }
+                else{
+                  events.splice( 0, 0, action.payload );
+                }
               }
               return {
                 ...state,

@@ -45,7 +45,7 @@ const eventForm=(props)=>{
           <input 
             type = "text" 
             id = "eventDescriptionInput"
-            placeholder = "author or extra info(optional)"
+            placeholder = "author or extra info"
             onInput = {props.inputedValue} />
         </div>
         <button 

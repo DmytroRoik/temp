@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import classes from './RoomManager.css';
+import './RoomManager.css';
 import RoomStatus from '../../components/RoomStatusWidget/RoomStatus';
 import { connect } from 'react-redux';
 import { loadEvents, loadCurrentEvent } from '../../store/actions/calendar';
@@ -20,11 +20,12 @@ class RoomManager extends Component{
     if ( btnName === 'Quick book for now!' || btnName === 'Quick check-in' ) {
       this.props.loadEventBuilder();
     }
+    else if (btnName === 'View') alert('To be continued!');
   }
 
   render(){
     return (
-      <div className = { classes.RoomManager } >
+      <div >
         <RoomStatus 
           status = { this.props.room.status } 
           eventName = { this.props.room.eventName } 
@@ -43,11 +44,11 @@ class RoomManager extends Component{
   componentDidMount() {
     const that = this;
     
-    this.timer = setInterval( () =>{// load evetns for calendar from google api every 30sec
+    this.timer = setInterval( () =>{// load evetns for calendar from google api every 15sec
       if( that.props.currentCalendar ) {
          that.props.loadCalenadarEvents( this.props.currentCalendar, this.props.token );
       }
-    },30000);
+    },15000);
     
     this.clock=setInterval( () => {
       let t=new Date();

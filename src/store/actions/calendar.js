@@ -62,7 +62,7 @@ const setBusyRoom = ( event, timeStart, timeEnd ) =>{
     payload: {
       status: 'Busy',
       eventName: event.name,
-      description: 'description',
+      description: event.description,
       timeStart: timeStart,
       timeEnd:  timeEnd,
       BtnName: 'View'
