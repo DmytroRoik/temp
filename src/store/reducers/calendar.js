@@ -77,15 +77,19 @@ export default function calendar(state = initialState, action) {
                 events.push(action.payload);
               }
               else {
-                let eventDateFirstEvent = Date.parse( events[0].end.dateTime );
-                let eventDate = Date.parse(action.payload.end.dateTime);
-
-                if( eventDate > eventDateFirstEvent){
-                  events.push(action.payload);
+                let eventDate = Date.parse(action.payload.end);
+                let index = -1;
+                for( let i=0; i< events.length; i++){
+                  let eDate = Date.parse( events[i].end );
+                  if( eventDate > eDate ){
+                    index = i;
+                  } 
                 }
-                else{
-                  events.splice( 0, 0, action.payload );
+                if( index !== -1 ) {
+                  events.splice( index + 1, 0, {...action.payload });
                 }
+                else events.push( {...action.payload});
+                
               }
               return {
                 ...state,
