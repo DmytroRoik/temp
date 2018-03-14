@@ -12,6 +12,12 @@ export const selectCalendar = ( id ) => {
   }
 }
 
+const deleteEventFromStore = ( id ) => {
+  return {
+    type: "DELETE_EVENT",
+    payload: id
+  }
+}
 
 /**
 * Save calendars id to store
@@ -155,8 +161,11 @@ const initClient = () => {//should rewrite for cordova
 export const loadCurrentEvent = ( event ) => {
   return dispatch => {
     let currentTime = new Date().valueOf();
-    if( !event ) {
-      dispatch( setAvailableRoom( " - " ) );
+    if( !event ) {  
+        dispatch( setAvailableRoom( " - " ) );
+    }
+    else if( Date.parse( event.end ) < currentTime ) {
+      dispatch ( deleteEventFromStore( event.id ) );
     }
     else{
       let timeToEvent = Date.parse( event.start ) - currentTime;

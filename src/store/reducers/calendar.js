@@ -96,7 +96,16 @@ export default function calendar(state = initialState, action) {
                 currentCalendarEvents: events
               }    
             }
-
+        case 'DELETE_EVENT':
+          {
+            let events = [ ...state.currentCalendarEvents ];
+            let index = events.findIndex(item => item.id === action.payload );
+            if( index !== -1 ) events.splice( index, 1);
+              return {
+                ...state,
+                currentCalendarEvents: events
+              }
+          }
         default:
             return state
     }

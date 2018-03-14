@@ -22,7 +22,7 @@ class CalendarList extends Component{
       
       if( name && isNameUniq )
        this.props.createCalendar(name,this.props.token);
-      else if( name !== "" ) {
+      else if( name !== "" || isNameUniq ) {
         alert('Error!\n name must be uniq');
         return;
       }
