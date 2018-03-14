@@ -63,13 +63,14 @@ const eventForm=(props)=>{
     stageForm=(
       <div className = "inputFileds" >
          <DateTimePicker 
+          showClock = { true }
           returnMomentDate = { true }
           onChange = { (dateTime) => props.changeDateTime( "event-start", dateTime ) }
           id = "event-start"
           floatingLabelText = "Event start"
           DatePicker = { DatePickerDialog }
           TimePicker = { TimePickerDialog }
-          errorText = { props.error.eventEnd }
+          errorText = { props.error.eventStart || props.error.eventEnd }
         />
            < DateTimePicker 
             returnMomentDate = { true }

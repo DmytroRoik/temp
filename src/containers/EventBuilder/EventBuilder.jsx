@@ -30,14 +30,21 @@ class EventBuilder extends Component{
    * @param { moment } dateTime -- date and time in moment object 
    */
   onChangeDateTimeHandler = ( id, dateTime ) => {
-    if ( id === "event-start" )
-      this.newEvent.start = dateTime;
+    let errors = {...this.state.errors};
+    if ( id === "event-start" ){
+      if( dateTime < moment() - 3 * 60 * 1000 ){
+        errors.eventStart = "Error!\n Event start in the past";
+      }
+      else {
+        errors.eventStart = null;
+        this.newEvent.start = dateTime;
+      }
+      this.setState ( { errors: errors })
+    }
     else if ( id === "event-end" )
       this.newEvent.end = dateTime;
 
     if( this.newEvent.start && this.newEvent.end ) {//validation
-      let errors = {...this.state.errors};
-
       if( this.newEvent.start - this.newEvent.end >= 0) {
         errors.eventEnd = "The event has start faster than the end!";
         this.setState( {
@@ -91,7 +98,8 @@ class EventBuilder extends Component{
       let isTimePresent = this.newEvent.start && this.newEvent.end;
   
       if( this.newEvent.summary && isTimePresent ) {
-        if( this.state.errors.eventEnd || this.state.errors.conflictEvents.length!==0 ) {
+        let isHasErrors = this.state.errors.eventEnd || this.state.errors.conflictEvents.length!==0 || this.state.errors.eventStart;
+        if( isHasErrors ) {
           alert( 'Room will be busy in this time\n Please select another time');
           return;
         }
