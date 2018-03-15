@@ -42,7 +42,6 @@ class CalendarList extends Component {
   onCalendarItemClickHandler = id => {
     this.props.selectCalendar( id );
     this.props.loadCalendarEvents( id, this.props.token );
-    
   }
   render() {
     return (
