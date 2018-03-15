@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import './CalendarList.css';
 import CalendarItem from '../../components/CalendarItem/CalendarItem.jsx';
 import { createCalendar, loadEvents, selectCalendar } from '../../store/actions/calendar';
-import { toggleCalendarsListVisibility } from '../../store/actions/UI';
 import { Link } from 'react-router-dom';
 
 class CalendarList extends Component {
@@ -14,8 +13,7 @@ class CalendarList extends Component {
     token: PropTypes.string,
     createCalendar: PropTypes.func,
     selectCalendar: PropTypes.func,
-    loadCalendarEvents: PropTypes.func,
-    toggleCalendarList: PropTypes.func
+    loadCalendarEvents: PropTypes.func
   };
   constructor( props ) {
     super( props );
@@ -44,7 +42,7 @@ class CalendarList extends Component {
   onCalendarItemClickHandler = id => {
     this.props.selectCalendar( id );
     this.props.loadCalendarEvents( id, this.props.token );
-    this.props.toggleCalendarList( false );
+    
   }
   render() {
     return (
@@ -92,8 +90,7 @@ const mapDispatchToProps = dispatch => {
   return {
     createCalendar: ( name, token ) => dispatch( createCalendar( name, token ) ),
     loadCalendarEvents: ( calendarId, token ) => dispatch( loadEvents( calendarId, token ) ),
-    selectCalendar: calendarId => dispatch( selectCalendar( calendarId ) ),
-    toggleCalendarList: isVisible => dispatch( toggleCalendarsListVisibility( isVisible ) )
+    selectCalendar: calendarId => dispatch( selectCalendar( calendarId ) )
   };
 };
 export default connect( mapStateToProps, mapDispatchToProps )( CalendarList );

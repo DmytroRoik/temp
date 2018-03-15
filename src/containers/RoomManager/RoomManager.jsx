@@ -5,7 +5,6 @@ import RoomStatus from '../../components/RoomStatusWidget/RoomStatus';
 import EventBuilder from '../EventBuilder/EventBuilder';
 import { connect } from 'react-redux';
 import { loadEvents, loadCurrentEvent } from '../../store/actions/calendar';
-import { toggleEventBuildVisibility } from '../../store/actions/UI';
 import { getClock, getTimeString } from '../../service/util';
 
 class RoomManager extends Component {
@@ -81,8 +80,7 @@ const mapStateToProps = state => {
     events: state.calendar.currentCalendarEvents,
     token: state.calendar.access_token,
     currentCalendar: state.calendar.currentCalendar,
-    room: state.calendar.room,
-    eventBuilderShow: state.UI.eventBuilderShow
+    room: state.calendar.room
   };
 };
 const mapDispatchToProps = dispatch => {

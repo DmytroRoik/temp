@@ -1,10 +1,8 @@
 import {combineReducers} from 'redux';
 import calendar from './calendar';
-import UI from './UI';
 
 const allReducers=combineReducers({
- calendar,
- UI,
+ calendar
 });
 
 export default allReducers;

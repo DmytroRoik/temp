@@ -4,7 +4,6 @@ import './EventBuilder.css';
 import PropTypes from 'prop-types';
 import EventForm from '../../components/CreateEventForm/EventForm.jsx';
 import { connect } from 'react-redux';
-import { toggleEventBuildVisibility } from '../../store/actions/UI';
 import { createEvent } from '../../store/actions/calendar';
 import moment from 'moment';
 
