@@ -3,7 +3,7 @@ const initialState = {
   allCalendars: [],
 
   currentCalendar: localStorage.getItem( 'calendarId' ) || '',
-  currentCalendarEvents: [],
+  currentCalendarEvents: JSON.parse( localStorage.getItem( 'Events') ) || [],
   access_token: '',
   room: {
     status: 'Available',
@@ -66,6 +66,7 @@ export default function calendar( state = initialState, action ) {
     }
     case 'LOAD_CALENDAR_EVENTS':
     {
+      localStorage.setItem( 'Events', JSON.stringify( action.payload ) );
       return {
         ...state,
         currentCalendarEvents: [...action.payload]   
