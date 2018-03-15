@@ -3,14 +3,11 @@ import CalendarList from '../containers/Calendars/CalendarsList.jsx';
 import { connect } from 'react-redux';
 import { loadCalendarApi } from '../store/actions/calendar';
 import RoomManager from '../containers/RoomManager/RoomManager.jsx';
-import EventBuilder from '../containers/EventBuilder/EventBuilder.jsx';
 import PropTypes from 'prop-types';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 class App extends Component {
   static propTypes = {
-    eventBuilderShow: PropTypes.bool,
-    calendarListShow: PropTypes.bool,
     loadCalendars: PropTypes.func
   };
 
@@ -18,9 +15,9 @@ class App extends Component {
     return ( 
       <BrowserRouter>
         <Switch>
-          <Route path="/calendarList" exact component={ CalendarList } />
-          <Route path="/" component={ RoomManager } />
-          <Route path="/new-event" exact component={ EventBuilder } />
+          <Route path = "/" exact component = { CalendarList } />
+          <Route path = "/roomManager" component = { RoomManager } />
+          <Redirect to = "/roomManager" />      
         </Switch>
       </BrowserRouter>
     );
@@ -29,12 +26,6 @@ class App extends Component {
     this.props.loadCalendars();
   }
 }
-const mapStateToProp = state => {
-  return {
-    calendarListShow: state.UI.calendarListShow,
-    eventBuilderShow: state.UI.eventBuilderShow
-  };
-};
 
 const mapDispatchToProp = dispatch => {
   return {
@@ -42,4 +33,4 @@ const mapDispatchToProp = dispatch => {
   };
 };
 
-export default connect( mapStateToProp, mapDispatchToProp )( App );
+export default connect( null, mapDispatchToProp )( App );

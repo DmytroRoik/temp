@@ -3,6 +3,7 @@
   font-size: 25px;
   width: 75%;
   color: white;
+  z-index: 5;
 }
 .inputFileds{
   display: flex;

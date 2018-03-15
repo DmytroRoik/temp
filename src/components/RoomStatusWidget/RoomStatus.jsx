@@ -1,5 +1,6 @@
 import React from 'react';
-import  './RoomStatus.css';
+import './RoomStatus.css';
+import { Link } from 'react-router-dom';
 
 /**
  * Use: <RoomStatus status="" eventName="" timeEventBegin="" timeEventFinish="" description="" currentTime="" timeToNextEvent="" clicked={} BtnName="" />
@@ -12,53 +13,63 @@ import  './RoomStatus.css';
  *  {string} description -  description of current event(author, some about event)
  *  {string} BtnName - name for bottom button
  */
-const roomStatus = ( props ) => {
- let statusText = "";
- if( props.status === "Available" ) { statusText = props.status; }
- else if( props.status === "Reserved" ) { statusText = "Available"; }
- else if( props.status === "Busy" ){statusText=props.eventName}
+const roomStatus = props => {
+  let statusText = '';
+  if ( props.status === 'Available' ) {
+    statusText = props.status; 
+  } else if ( props.status === 'Reserved' ) {
+    statusText = 'Available'; 
+  } else if ( props.status === 'Busy' ) {
+    statusText = props.eventName;
+  }
 
- let timeToEvent = "";
-  if( props.timeToNextEvent === "0:0" ) timeToEvent = "less than 1 minute";
-  else if( props.timeToNextEvent === "- :-" ) timeToEvent = "no planned events";
-  else timeToEvent = 'for ' + props.timeToNextEvent.replace(':','h ')+' min';
+  let timeToEvent = '';
+  if ( props.timeToNextEvent === '0:0' ) {
+    timeToEvent = 'less than 1 minute';
+  } else if ( props.timeToNextEvent === '- :-' ) { 
+    timeToEvent = 'no planned events'; 
+  } else {
+    timeToEvent = `for ${props.timeToNextEvent.replace( ':', 'h ' )} min`;
+  }
 
   return (
-  <div className = "RoomStatus" >
+    <div className = "RoomStatus" >
 
-    <div className = { `header header-${ props.status }`} >
-      <div className =  { `container container-${ props.status }`} >
-        <div className = { `status status-${ props.status }`} > {statusText}</div>
-        { props.status === "Busy" ?
-          <div>
-            <div className = "EventDuration" >
-              { props.timeEventBegin }
-              <span>-</span>
-              { props.timeEventFinish }
+      <div className = { `header header-${props.status}`} >
+        <div className = { `container container-${props.status}`} >
+          <div className = { `status status-${props.status}`} > {statusText}</div>
+          { props.status === 'Busy' ?
+            <div>
+              <div className = "EventDuration" >
+                { props.timeEventBegin }
+                <span>-</span>
+                { props.timeEventFinish }
+              </div>
+              <p className = "description" > { props.description } </p>
             </div>
-            <p className = "description" > { props.description } </p>
+            : <div>
+              <div className = "EventStart" >
+                { timeToEvent }
+              </div>
+              <div className = { `arrow arrow-${props.status}`} > &raquo; </div>
+            </div>
+          }
         </div>
-        : <div>
-            <div className = "EventStart" >
-              { timeToEvent }
-            </div>
-            <div className = { `arrow arrow-${ props.status }`} > &raquo; </div>
-          </div>
-        }
-       </div>
-    </div>
+      </div>
 
-    <div className = { `footer footer-${ props.status }`} >
-      <div className = "container" >
-        <div className = "clock" > { props.currentTime } </div>
-        <button 
-          onClick = { props.clicked } 
-          className = { `btn btn-${ props.status }`}
+      <div className = { `footer footer-${props.status}`} >
+        <div className = "container" >
+          <div className = "clock" > { props.currentTime } </div>
+          <button
+            to = "/newEvent"
+            onClick = { props.clicked } 
+            className = { `btn btn-${props.status}`}
           >
-          { props.BtnName }
-        </button>  
+            { props.BtnName }
+          </button>  
+        </div>
       </div>
     </div>
-  </div>
-);}
+  );
+};
 export default roomStatus;

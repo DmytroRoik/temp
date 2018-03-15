@@ -8,7 +8,7 @@ export const getClock = dateTime => {
   if ( isNaN( time ) ) {
     return '';
   }
-  const timeString = time.getMinutes() < 10 ? `0 ${time.getMinutes()}` : time.getMinutes();
+  const timeString = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
   return `${time.getHours()}:${timeString}`;
 };
 
@@ -24,5 +24,8 @@ export const getTimeString = dateTime => {
   let m = minutes - h * 60;
   h = isNaN( h ) ? '- ' : h;
   m = isNaN( m ) ? '-' : m;
+  if ( h ===0 ) {
+    return '' + m;
+  }
   return `${h}:${m}`;
 };

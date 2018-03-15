@@ -1,12 +1,14 @@
 /* global alert */
 import React from 'react';
 import moment from 'moment';
+
 import DateTimePicker from 'material-ui-datetimepicker';
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog';
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import PropTypes from 'prop-types';
 import './EventForm.css';
+
 
 /**
  * Use: <EventForm stage="" clickedBack={} clickedNext={} inputedValue={} error={}/>
@@ -45,7 +47,7 @@ const eventForm = props => {
             type = "text"
             id = "eventDescriptionInput"
             placeholder = "author or extra info"
-            onInput = {props.inputedValue} />
+            onInput = { props.inputedValue } />
         </div>
         <button
           onClick = {props.clickedBack} 
@@ -61,7 +63,6 @@ const eventForm = props => {
     stageForm = (
       <div className = "inputFileds" >
         <DateTimePicker
-          showClock = { true }
           returnMomentDate = { true }
           onChange = { dateTime => props.changeDateTime( 'event-start', dateTime ) }
           id = "event-start"

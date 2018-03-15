@@ -14,7 +14,8 @@ class EventBuilder extends Component {
     token: PropTypes.string,
     calendarId: PropTypes.string,
     createCalendarEvent: PropTypes.func,
-    hideEventBuilder: PropTypes.func
+    hideEventBuilder: PropTypes.func,
+    show: PropTypes.bool
   };
 
   constructor( props ) {
@@ -129,6 +130,9 @@ class EventBuilder extends Component {
   }
 
   render() {
+    if ( this.props.show === false ) {
+      return null;
+    }
     return (
       <div className = "EventBuilder" >
         <EventForm 
@@ -152,7 +156,6 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    hideEventBuilder: () => dispatch( toggleEventBuildVisibility( false ) ),
     createCalendarEvent: ( event, calendarId, access_token ) =>
       dispatch( createEvent( event, calendarId, access_token ) )
   };

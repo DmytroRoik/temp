@@ -6,6 +6,7 @@ import './CalendarList.css';
 import CalendarItem from '../../components/CalendarItem/CalendarItem.jsx';
 import { createCalendar, loadEvents, selectCalendar } from '../../store/actions/calendar';
 import { toggleCalendarsListVisibility } from '../../store/actions/UI';
+import { Link } from 'react-router-dom';
 
 class CalendarList extends Component {
   static propTypes = {
@@ -51,12 +52,15 @@ class CalendarList extends Component {
         <h2>Select Calendars for device:</h2>
         <ul>
           { this.props.calendars.map( calendar =>
-            <CalendarItem
-              key = {calendar.id}
-              calendarId = {calendar.id}
-              calendarName = {calendar.name}
-              clicked = {() => this.onCalendarItemClickHandler( calendar.id )}
-            />
+            <Link 
+              to="/roomManager" 
+              key = { calendar.id } >
+              <CalendarItem
+                calendarId = { calendar.id }
+                calendarName = { calendar.name }
+                clicked = {() => this.onCalendarItemClickHandler( calendar.id )}
+              />
+            </Link>
           )
           }
         </ul>

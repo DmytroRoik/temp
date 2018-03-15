@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import './RoomManager.css';
 import RoomStatus from '../../components/RoomStatusWidget/RoomStatus';
+import EventBuilder from '../EventBuilder/EventBuilder';
 import { connect } from 'react-redux';
 import { loadEvents, loadCurrentEvent } from '../../store/actions/calendar';
 import { toggleEventBuildVisibility } from '../../store/actions/UI';
@@ -11,7 +12,8 @@ class RoomManager extends Component {
   constructor( props ) {
     super( props );
     this.state = {
-      currentTime: ''
+      currentTime: '',
+      isEventBuilderShow: false
     };
     this.timer = null;
     this.clock = null;
@@ -19,10 +21,13 @@ class RoomManager extends Component {
   
   onRoomStatusBtnClickHandler = btnName => {
     if ( btnName === 'Quick book for now!' || btnName === 'Quick check-in' ) {
-      this.props.loadEventBuilder();
+      this.setEventBuilderVisibility( true );
     } else if ( btnName === 'View' ) {
       alert( 'To be continued!' );
     }
+  }
+  setEventBuilderVisibility = show => {
+    this.setState( { isEventBuilderShow: show } );
   }
 
   render() {
@@ -34,10 +39,14 @@ class RoomManager extends Component {
           timeEventBegin = { getClock( this.props.room.timeStart ) } 
           timeEventFinish = { getClock( this.props.room.timeEnd ) }
           timeToNextEvent = { getTimeString( this.props.room.timeToNextEvent ) } 
-          description = { this.props.room.description } 
-          currentTime = { getClock( this.state.currentTime ) } 
+          description = { this.props.room.description }
+          currentTime = { getClock( this.state.currentTime ) }
           BtnName = { this.props.room.BtnName }
           clicked = { () => this.onRoomStatusBtnClickHandler( this.props.room.BtnName ) }
+        />
+        <EventBuilder 
+          show = { this.state.isEventBuilderShow }
+          hideEventBuilder = { () => this.setEventBuilderVisibility( false ) }
         />
       </div>
     );
@@ -72,13 +81,13 @@ const mapStateToProps = state => {
     events: state.calendar.currentCalendarEvents,
     token: state.calendar.access_token,
     currentCalendar: state.calendar.currentCalendar,
-    room: state.calendar.room
+    room: state.calendar.room,
+    eventBuilderShow: state.UI.eventBuilderShow
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
     loadCalenadarEvents: ( calendarId, token ) => dispatch( loadEvents( calendarId, token ) ),
-    loadEventBuilder: () => dispatch( toggleEventBuildVisibility( true ) ),
     loadCurrentState: event => dispatch( loadCurrentEvent( event ) )
   };
 };
