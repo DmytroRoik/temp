@@ -5,6 +5,7 @@ import { loadCalendarApi } from '../store/actions/calendar';
 import RoomManager from '../containers/RoomManager/RoomManager.jsx';
 import EventBuilder from '../containers/EventBuilder/EventBuilder.jsx';
 import PropTypes from 'prop-types';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 class App extends Component {
   static propTypes = {
@@ -15,10 +16,13 @@ class App extends Component {
 
   render() {
     return ( 
-      <div >
-        { this.props.calendarListShow ? <CalendarList /> : <RoomManager/> }
-        { this.props.eventBuilderShow ? <EventBuilder/> : null }
-      </div>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/calendarList" exact component={ CalendarList } />
+          <Route path="/" component={ RoomManager } />
+          <Route path="/new-event" exact component={ EventBuilder } />
+        </Switch>
+      </BrowserRouter>
     );
   }
   componentDidMount() {

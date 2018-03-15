@@ -107,7 +107,7 @@ class EventBuilder extends Component {
                               || this.state.errors.eventStart;
 
         if ( isHasErrors ) {
-          alert( 'Room will be busy in this time\n Please select another time');
+          alert( 'Room will be busy in this time\n Please select another time' );
           return;
         }
         this.props.createCalendarEvent( this.newEvent, this.props.calendarId, this.props.token );
@@ -122,8 +122,7 @@ class EventBuilder extends Component {
   onBtnPrevClickHandler = () => {
     if ( this.state.stage === '2' ) {
       this.setState( { stage: '1' } );
-    }
-    else {
+    } else {
       this.setState( { errors: {} } );// clear errors
       this.props.hideEventBuilder();
     }
@@ -149,8 +148,8 @@ const mapStateToProps = state => {
     token: state.calendar.access_token,
     calendarId: state.calendar.currentCalendar,
     events: state.calendar.currentCalendarEvents
-  }
-}
+  };
+};
 const mapDispatchToProps = dispatch => {
   return {
     hideEventBuilder: () => dispatch( toggleEventBuildVisibility( false ) ),
