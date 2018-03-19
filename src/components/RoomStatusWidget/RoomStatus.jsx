@@ -23,17 +23,20 @@ const roomStatus = props => {
   }
 
   let timeToEvent = '';
+  let time = props.timeToNextEvent.split( ':' );
+  
   if ( props.timeToNextEvent === '0:0' ) {
     timeToEvent = 'less than 1 minute';
   } else if ( props.timeToNextEvent === '- :-' ) { 
     timeToEvent = 'no planned events'; 
+  } else if ( +time[0] > 24 ) {
+    timeToEvent = 'for today';
   } else {
     timeToEvent = `for ${props.timeToNextEvent.replace( ':', 'h ' )} min`;
   }
 
   return (
     <div className = "RoomStatus" >
-
       <div className = { `header header-${props.status}`} >
         <div className = { `container container-${props.status}`} >
           <div className = { `status status-${props.status}`} > {statusText}</div>

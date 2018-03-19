@@ -67,14 +67,20 @@ const eventForm = props => {
           onChange = { dateTime => props.changeDateTime( 'event-start', dateTime ) }
           id = "event-start"
           floatingLabelText = "Event start"
+          format = 'MMM DD, YYYY HH:MM'
+          timeFormat = "24hr"
           DatePicker = { DatePickerDialog }
           TimePicker = { TimePickerDialog }
+          fullWidth = { true }
           errorText = { props.error.eventStart || props.error.eventEnd }
         />
         < DateTimePicker 
           returnMomentDate = { true }
           onChange = { dateTime => props.changeDateTime( 'event-end', dateTime ) }
           id = "event-end"
+          format = "MMM DD, YYYY HH:MM"
+          timeFormat = "24hr"
+          fullWidth = { true }
           floatingLabelText = "Event end"
           DatePicker = { DatePickerDialog }
           TimePicker = { TimePickerDialog }

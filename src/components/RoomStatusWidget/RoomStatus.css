@@ -44,9 +44,9 @@ justify-content: center;
 }
 .status-Busy{
   color: white;
-  font-size: 48px;
   text-align: center;
   padding: 0;
+  font-size: 35px;
 }
 
 .EventStart{
@@ -91,6 +91,7 @@ justify-content: center;
 }
 
 .btn{
+  color: black;
   padding: 20px;
   background-color: rgb(13,149,5);
   font-size: 30px;
@@ -98,7 +99,7 @@ justify-content: center;
   border: 1px solid black;
   border-radius: 3px;
 }
-.btn-Busy{
+.btn.btn-Busy{
   background-color: #B80000;
   padding: 20px 70px;
 }

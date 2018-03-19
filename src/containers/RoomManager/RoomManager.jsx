@@ -19,11 +19,7 @@ class RoomManager extends Component {
   }
   
   onRoomStatusBtnClickHandler = btnName => {
-    if ( btnName === 'Quick book for now!' || btnName === 'Quick check-in' ) {
-      this.setEventBuilderVisibility( true );
-    } else if ( btnName === 'View' ) {
-      alert( 'To be continued!' );
-    }
+    this.setEventBuilderVisibility( true );
   }
   setEventBuilderVisibility = show => {
     this.setState( { isEventBuilderShow: show } );
