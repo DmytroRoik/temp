@@ -1,6 +1,5 @@
 import React from 'react';
 import './RoomStatus.css';
-import { Link } from 'react-router-dom';
 
 /**
  * Use: <RoomStatus status="" eventName="" timeEventBegin="" timeEventFinish="" description="" currentTime="" timeToNextEvent="" clicked={} BtnName="" />

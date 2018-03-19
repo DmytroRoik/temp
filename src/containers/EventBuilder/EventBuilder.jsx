@@ -105,7 +105,6 @@ class EventBuilder extends Component {
       if ( this.newEvent.summary && isTimePresent ) {
         const isHasErrors = this.state.errors.eventEnd || this.state.errors.conflictEvents.length !== 0 
                               || this.state.errors.eventStart;
-
         if ( isHasErrors ) {
           alert( 'Room will be busy in this time\n Please select another time' );
           return;

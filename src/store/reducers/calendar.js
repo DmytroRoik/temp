@@ -3,7 +3,7 @@ const initialState = {
   allCalendars: [],
 
   currentCalendar: localStorage.getItem( 'calendarId' ) || '',
-  currentCalendarEvents: JSON.parse( localStorage.getItem( 'Events') ) || [],
+  currentCalendarEvents: JSON.parse( localStorage.getItem( 'Events' ) ) || [],
   access_token: '',
   room: {
     status: 'Available',
