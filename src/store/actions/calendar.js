@@ -87,6 +87,13 @@ const saveCalendarEvents = events => {
   };
 };
 
+const showSpinner = show => {
+  return {
+    type: "SHOW_SPINNER",
+    payload: show
+  };
+};
+
 const saveCalendar = calendar => {
   return {
     type: 'SAVE_CALENDAR',
@@ -102,6 +109,7 @@ const saveEvent = event => {
 
 const loadCalendarsFromGoogle = access_token => {
   return dispatch => {
+    dispatch( showSpinner( true ) );
     axios.get( `https://www.googleapis.com/calendar/v3/users/me/calendarList?access_token=${access_token}` )
       .then( res => {
         res = res.data.items;
@@ -115,7 +123,8 @@ const loadCalendarsFromGoogle = access_token => {
           }
         } );
         dispatch( createCalendarsList( calendars, access_token ) );
-      } );
+      } )
+      .catch( () => dispatch( showSpinner( false ) ) );
   };
 };
 

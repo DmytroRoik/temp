@@ -1,9 +1,10 @@
 /* global localStorage */
 const initialState = {
   allCalendars: [],
-
   currentCalendar: localStorage.getItem( 'calendarId' ) || '',
   currentCalendarEvents: JSON.parse( localStorage.getItem( 'Events' ) ) || [],
+  
+  loading: false,
   access_token: '',
   room: {
     status: 'Available',
@@ -36,11 +37,12 @@ export default function calendar( state = initialState, action ) {
       };
     }
     case 'CREATE_CALENDARS_LIST':
-    {
+    { alert('asd')
       return {
         ...state,
         allCalendars: [...action.payload],
-        access_token: action.token
+        access_token: action.token,
+        loading: false
       };
     }
     case 'SET_AVAILABLE_ROOM':
@@ -63,6 +65,13 @@ export default function calendar( state = initialState, action ) {
         ...state,
         room: { ...action.payload }
       };
+    }
+    case 'SHOW_SPINNER':
+    {
+      return {
+        ...state,
+        loading: action.payload
+      }
     }
     case 'LOAD_CALENDAR_EVENTS':
     {

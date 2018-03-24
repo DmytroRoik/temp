@@ -6,6 +6,7 @@ import { loadCalendarApi } from '../store/actions/calendar';
 import RoomManager from '../containers/RoomManager/RoomManager.jsx';
 import PropTypes from 'prop-types';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Spinner from '../components/UI/Spinner/Spinner';
 
 class App extends Component {
   constructor( props ) {
@@ -22,10 +23,9 @@ class App extends Component {
     this.setState( { calendarListShow: isShow } );
   }
   render() {
-    let routes;
-
     return ( 
       <div>
+        <Spinner show = { this.props.isLoading }/>
         { this.state.calendarListShow ?
           <CalendarList clicked = { this.toggleCalendarListVisibility } /> : 
           <RoomManager/> }
@@ -45,7 +45,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    calendarId: state.calendar.currentCalendar  
+    calendarId: state.calendar.currentCalendar,
+    isLoading: state.calendar.loading
   };
 };
 
