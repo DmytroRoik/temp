@@ -41,7 +41,7 @@ const eventForm = props => {
         <div className = "inputFileds">
           <label
             htmlFor = "eventDescriptionInput" >
-            Event description:
+            Event author:
           </label>
           <input
             type = "text"
@@ -60,6 +60,7 @@ const eventForm = props => {
       </div>
     );
   } else if ( props.stage === '2' ) {
+    let orientation = window.screen.orientation.type.indexOf( 'portrait' ) === -1 ? 'landscape' : 'portrait' ;
     stageForm = (
       <div className = "inputFileds" >
         <DateTimePicker
@@ -67,7 +68,7 @@ const eventForm = props => {
           onChange = { dateTime => props.changeDateTime( 'event-start', dateTime ) }
           id = "event-start"
           floatingLabelText = "Event start"
-          format = 'MMM DD, YYYY HH:MM'
+          format = 'MMM DD, YYYY HH:mm'
           timeFormat = "24hr"
           DatePicker = { DatePickerDialog }
           TimePicker = { TimePickerDialog }
@@ -78,7 +79,7 @@ const eventForm = props => {
           returnMomentDate = { true }
           onChange = { dateTime => props.changeDateTime( 'event-end', dateTime ) }
           id = "event-end"
-          format = "MMM DD, YYYY HH:MM"
+          format = "MMM DD, YYYY HH:mm"
           timeFormat = "24hr"
           fullWidth = { true }
           floatingLabelText = "Event end"
@@ -113,8 +114,8 @@ const eventForm = props => {
                   key = { ev.id } >
                   <span className = "conflicts-item-name" >{ ev.name } </span>
                   <br/>
-                  <span className = "conflicts-item-time"> start: { `${moment( ev.start ).format( 'lll' )}` } </span>
-                  <span className = "conflicts-item-time"> end: {` ${moment( ev.end ).format( 'lll' )}` } </span>
+                  <span className = "conflicts-item-time"> start: { `${moment( ev.start ).format( 'MMMM Do, HH:mm' )}` } </span>
+                  <span className = "conflicts-item-time"> end: {` ${moment( ev.end ).format( 'MMMM Do, HH:mm' )}` } </span>
                 </li> );
               } )}
             </ol>

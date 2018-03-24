@@ -3,7 +3,6 @@
   font-size: 25px;
   width: 75%;
   color: white;
-  z-index: 5;
 }
 .inputFileds{
   display: flex;
@@ -19,6 +18,14 @@
   padding: 10px;
   border-radius: 5px;
   border: none;
+}
+#eventNameInput::placeholder,
+#eventDescriptionInput::placeholder{
+  height: 25px;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  color: #645353;
 }
 label[for="event-start"],
 label[for="event-end"]
@@ -56,16 +63,17 @@ input#event-end {
 }
 .conflicts h3{
   margin-bottom: 5px;
+  text-align: center;
 }
 .conflicts-container{
   margin: 0;
 }
 .conflicts-item{
-  
+  padding: 10px 0;
 }
 .conflicts-item-name{
-  color: blue;
-  font-weight: bold;
+  color: red;
+  font-weight: 800;
 }
 .conflicts-item-time{
   font-size: 18px;

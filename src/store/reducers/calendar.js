@@ -37,7 +37,7 @@ export default function calendar( state = initialState, action ) {
       };
     }
     case 'CREATE_CALENDARS_LIST':
-    { alert('asd')
+    { 
       return {
         ...state,
         allCalendars: [...action.payload],

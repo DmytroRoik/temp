@@ -25,11 +25,11 @@ const roomStatus = props => {
   let timeToEvent = '';
   let time = props.timeToNextEvent.split( ':' );
   
-  if ( props.timeToNextEvent === '0:0' ) {
+  if ( props.timeToNextEvent === '0' ) {
     timeToEvent = 'less than 1 minute';
   } else if ( props.timeToNextEvent === '- :-' ) { 
     timeToEvent = 'no planned events'; 
-  } else if ( +time[0] > 24 ) {
+  } else if ( time.length === 2 && +time[0] > 24 ) {
     timeToEvent = 'for today';
   } else {
     timeToEvent = `for ${props.timeToNextEvent.replace( ':', 'h ' )} min`;
@@ -53,13 +53,13 @@ const roomStatus = props => {
               <div className = "EventStart" >
                 { timeToEvent }
               </div>
-              <div className = { `arrow arrow-${props.status}`} > &raquo; </div>
+              <div className = { `arrow arrow-${ props.status }`} > &raquo; </div>
             </div>
           }
         </div>
       </div>
 
-      <div className = { `footer footer-${props.status}`} >
+      <div className = { `footer footer-${ props.status }`} >
         <div className = "container" >
           <div className = "clock" > { props.currentTime } </div>
           <button
