@@ -77,18 +77,6 @@ class EventBuilder extends Component {
     return result;
   } 
 
-  isRoomIsFree = event => {
-    return !this.props.events.some( element => {
-      const isStartInTheAnotherEvent = moment( event.start ) > moment( element.start ) 
-                                      && moment( event.start ) < moment( element.end );
-      const isEndInTheAnotherEvent = moment( event.end ) > moment( element.start ) 
-                                    && moment( event.end ) < moment( element.end );
-      const isEventCoverAnotherEvent = moment( element.start ) > moment( event.start ) 
-                                      && moment( element.end ) < moment( event.end );
-      return isStartInTheAnotherEvent || isEndInTheAnotherEvent || isEventCoverAnotherEvent;
-    } );
-  }
-
   onBtnNextClickHandler = () => {
     if ( this.state.stage === '1' ) {
       if ( this.newEvent.summary ) {
@@ -122,9 +110,10 @@ class EventBuilder extends Component {
     if ( this.state.stage === '2' ) {
       this.setState( { stage: '1' } );
     } else {
-      this.setState( { errors: {} } );// clear errors
       this.props.hideEventBuilder();
     }
+    this.newEvent = {};
+    this.setState( { errors: {} } );// clear errors
   }
 
   render() {
