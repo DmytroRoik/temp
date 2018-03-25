@@ -24,7 +24,7 @@ export const getTimeString = dateTime => {
   let m = minutes - h * 60;
   h = isNaN( h ) ? '- ' : h;
   m = isNaN( m ) ? '-' : m;
-  if ( h ===0 ) {
+  if ( h === 0 ) {
     return '' + m;
   }
   return `${h}:${m}`;

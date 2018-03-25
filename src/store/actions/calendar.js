@@ -27,13 +27,14 @@ const deleteEventFromStore = id => {
 * @param {string} token - user token for google api
 * @returns { action } dispatch action
 */
-const createCalendarsList = ( calendarsId, token ) => {
+const createCalendarsList = ( calendarsId, token) => {
   return {
     type: 'CREATE_CALENDARS_LIST',
     payload: calendarsId,
     token: token
   };
 };
+
 
 const setAvailableRoom = timeToEvent => {
   return {

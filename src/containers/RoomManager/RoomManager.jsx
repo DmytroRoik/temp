@@ -1,6 +1,5 @@
 /* global alert */
 import React, { Component } from 'react';
-import './RoomManager.css';
 import RoomStatus from '../../components/RoomStatusWidget/RoomStatus';
 import EventBuilder from '../EventBuilder/EventBuilder';
 import { connect } from 'react-redux';
@@ -18,7 +17,7 @@ class RoomManager extends Component {
     this.clock = null;
   }
   
-  onRoomStatusBtnClickHandler = btnName => {
+  onRoomStatusBtnClickHandler = () => {
     this.setEventBuilderVisibility( true );
   }
   setEventBuilderVisibility = show => {
@@ -37,7 +36,7 @@ class RoomManager extends Component {
           description = { this.props.room.description }
           currentTime = { getClock( this.state.currentTime ) }
           BtnName = { this.props.room.BtnName }
-          clicked = { () => this.onRoomStatusBtnClickHandler( this.props.room.BtnName ) }
+          clicked = { () => this.onRoomStatusBtnClickHandler() }
         />
         <EventBuilder 
           show = { this.state.isEventBuilderShow }
