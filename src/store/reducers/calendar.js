@@ -84,23 +84,14 @@ export default function calendar( state = initialState, action ) {
     case 'SAVE_EVENT':
     {
       const events = [...state.currentCalendarEvents];
-      if ( events.length === 0 ) {
-        events.push( action.payload );
-      } else {
-        const eventDate = Date.parse( action.payload.end );
-        let index = -1;
-        for ( let i = 0; i < events.length; i++ ) {
-          const eDate = Date.parse( events[i].end );
-          if ( eventDate > eDate ) {
-            index = i;
-          } 
-        }
-        if ( index !== -1 ) {
-          events.splice( index + 1, 0, { ...action.payload } );
+      const eventDate = Date.parse( action.payload.end );
+      let index = events.findIndex( e => eventDate < Date.parse( e.end ) );
+
+       if ( index !== -1 ) {
+          events.splice( index, 0, { ...action.payload } );
         } else {
           events.push( { ...action.payload } );
         }
-      }
       return {
         ...state,
         currentCalendarEvents: events
