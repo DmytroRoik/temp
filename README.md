@@ -1,2 +1,11 @@
-1)fix problem with auth(every 1h  access_token deads)
-2)implement creating event
+Room Manager
+using:
+- React
+- Redux
+- Material UI
+- Google Calendar API
+
+How to run:
+  - npm install
+  - allow popup for this app (in browser )
+  - npm run start
