@@ -81,6 +81,7 @@ const eventForm = props => {
           id = "event-end"
           format = "MMM DD, YYYY HH:mm"
           timeFormat = "24hr"
+          style={{ border: '1px solid red' }}
           fullWidth = { true }
           floatingLabelText = "Event end"
           DatePicker = { DatePickerDialog }
