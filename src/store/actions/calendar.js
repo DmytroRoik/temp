@@ -1,7 +1,6 @@
 /* global window document alert */
 import axios from 'axios';
 import * as config from '../../config';
-import AWS from 'aws-sdk';
 
 /**
 *  Select current calendar by id
