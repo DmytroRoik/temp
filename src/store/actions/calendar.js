@@ -1,6 +1,7 @@
 /* global window document alert */
 import axios from 'axios';
 import * as config from '../../config';
+import AWS from 'aws-sdk';
 
 /**
 *  Select current calendar by id
@@ -223,6 +224,7 @@ export const loadEvents = ( calendarId, access_token ) => {
   return dispatch => {
     axios.get( `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?access_token=${access_token}` )
       .then( res => {
+        console.log(res.data);
         res = res.data;
         const calendarEvents = [];
         const curDate = new Date();
