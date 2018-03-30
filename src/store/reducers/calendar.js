@@ -6,6 +6,8 @@ const initialState = {
   
   loading: false,
   access_token: '',
+  settingsVisibility: false,
+  calendarListShow: !!localStorage.getItem( 'calendarId' ), 
   room: {
     status: 'Available',
     timeStart: '',
@@ -71,6 +73,31 @@ export default function calendar( state = initialState, action ) {
       return {
         ...state,
         loading: action.payload
+      }
+    }
+    case 'SHOW_SETTINGS':
+    {
+      return {
+        ...state,
+        settingsVisibility: action.payload
+      }
+    }
+    case 'REFRESH_APP':
+    {
+      return{
+        ...state,
+        access_token: '',
+        settingsVisibility: false,
+        calendarListShow: true,
+        currentCalendar: '',
+        currentCalendarEvents: []
+      }
+    }
+    case 'TOGGLE_CALENDAR_LIST':
+    {
+      return {
+        ...state,
+        calendarListShow: action.payload
       }
     }
     case 'LOAD_CALENDAR_EVENTS':

@@ -35,6 +35,19 @@ const createCalendarsList = ( calendarsId, token) => {
   };
 };
 
+export const toggleCalendarList = show => {
+  return {
+    type: 'TOGGLE_CALENDAR_LIST',
+    payload: show
+  }
+}
+export const refreshApp = () => {
+  return dispatch => {
+    dispatch({type:'REFRESH_APP'});
+    dispatch(setAvailableRoom());
+    dispatch(login());
+  }
+}
 
 const setAvailableRoom = timeToEvent => {
   return {
@@ -46,7 +59,7 @@ const setAvailableRoom = timeToEvent => {
       description: '',
       timeEnd: '',
       BtnName: 'Quick book for now!',
-      timeToNextEvent: timeToEvent
+      timeToNextEvent: timeToEvent||' - '
     }
   };
 };
@@ -94,7 +107,12 @@ const showSpinner = show => {
     payload: show
   };
 };
-
+export const showSettings = show => {
+  return {
+    type: "SHOW_SETTINGS",
+    payload: show
+  };
+};
 const saveCalendar = calendar => {
   return {
     type: 'SAVE_CALENDAR',
@@ -153,7 +171,7 @@ const initClient = () => {// should rewrite for cordova
   };
 };
 
-export const loadCalendarApi = () => {// should rewrite for cordova
+export const login = () => {// should rewrite for cordova
   return dispatch => {
     const script = document.createElement( 'script' );
     script.src = 'https://apis.google.com/js/api.js';

@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import RoomStatus from '../../components/RoomStatusWidget/RoomStatus';
 import EventBuilder from '../EventBuilder/EventBuilder';
 import { connect } from 'react-redux';
-import { loadEvents, loadCurrentEvent } from '../../store/actions/calendar';
+import { loadEvents, loadCurrentEvent, showSettings } from '../../store/actions/calendar';
 import { getClock, getTimeString } from '../../service/util';
+import Settings from '../Setings/Settings';
 
 class RoomManager extends Component {
   constructor( props ) {
@@ -23,10 +24,13 @@ class RoomManager extends Component {
   setEventBuilderVisibility = show => {
     this.setState( { isEventBuilderShow: show } );
   }
+  onScreenClickHandler = () => {
+    this.props.toggleSettings( !this.props.settingsVisibility);
+  }
 
   render() {
     return (
-      <div >
+      <div onDoubleClick={this.onScreenClickHandler} >
         <RoomStatus 
           status = { this.props.room.status } 
           eventName = { this.props.room.eventName } 
@@ -42,6 +46,7 @@ class RoomManager extends Component {
           show = { this.state.isEventBuilderShow }
           hideEventBuilder = { () => this.setEventBuilderVisibility( false ) }
         />
+        <Settings show={this.props.settingsVisibility}/>
       </div>
     );
   }
@@ -75,13 +80,15 @@ const mapStateToProps = state => {
     events: state.calendar.currentCalendarEvents,
     token: state.calendar.access_token,
     currentCalendar: state.calendar.currentCalendar,
-    room: state.calendar.room
+    room: state.calendar.room,
+    settingsVisibility: state.calendar.settingsVisibility
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
     loadCalenadarEvents: ( calendarId, token ) => dispatch( loadEvents( calendarId, token ) ),
-    loadCurrentState: event => dispatch( loadCurrentEvent( event ) )
+    loadCurrentState: event => dispatch( loadCurrentEvent( event ) ),
+    toggleSettings: show => dispatch( showSettings(show) )
   };
 };
 
