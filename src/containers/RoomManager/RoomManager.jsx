@@ -16,7 +16,15 @@ class RoomManager extends Component {
     this.timer = null;
     this.clock = null;
   }
-
+  shouldComponentUpdate(nextProps, nextState){
+    if(this.state.currentTime === nextState.currentTime 
+        && this.state.isEventBuilderShow === nextState.isEventBuilderShow)
+      {
+        return false;
+    } else {
+      return true;
+    }
+  }
   onRoomStatusBtnClickHandler = () => {
     this.setEventBuilderVisibility( true );
   }

@@ -35,7 +35,7 @@ class EventBuilder extends Component {
     this.timer = null;
   }
 
-  shouldComponentUpdate(nextProps, nextStatet){
+  shouldComponentUpdate(nextProps){
     if(nextProps.show!==true&&this.props.show!==true)return false;
     else return true;
   }
