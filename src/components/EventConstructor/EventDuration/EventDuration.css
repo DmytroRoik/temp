@@ -1,0 +1,27 @@
+.EventDuration{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.EventDuration-item{
+  padding: 20px;
+  margin: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 15px;
+  background: #ab1414;
+  border: none;
+  text-transform: capitalize;
+  width: 170px;
+}
+input#event-start,
+input#event-end {
+  color: white!important;
+  font-size: 20px!important;
+}
+label[for="event-start"],
+label[for="event-end"]
+{
+  color: rgba(255, 255, 255, 0.6)!important;
+  font-size: 20px!important;
+}

@@ -1,0 +1,31 @@
+.EventNames {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.EventName-item{
+  padding: 17px 30px;
+  margin: 20px;
+  background: yellow;
+  border: none;
+  font-weight: bold;
+  font-size: 20px;
+  text-transform: capitalize;
+  border-radius: 15px;
+  width: 170px;
+}
+.inputFileds{
+  width: 100%;
+  text-align: center;
+}
+.inputFileds input{
+  height: 40px;
+  border-radius: 7px;
+  font-size: 20px;
+  text-align: center;
+}
+.inputFileds label {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}

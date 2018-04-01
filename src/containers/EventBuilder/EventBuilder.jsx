@@ -6,6 +6,9 @@ import EventForm from '../../components/CreateEventForm/EventForm.jsx';
 import { connect } from 'react-redux';
 import { createEvent } from '../../store/actions/calendar';
 import moment from 'moment';
+import EventNames from '../../components/EventConstructor/EventName/EventNames';
+import EventStarts from '../../components/EventConstructor/EventTimeStart/EventStarts';
+import EventDuration from '../../components/EventConstructor/EventDuration/EventDuration';
 
 class EventBuilder extends Component {
   static propTypes = {
@@ -21,7 +24,10 @@ class EventBuilder extends Component {
     super( props );
     this.state = {
       stage: '1',
-      errors: {}
+      errors: {},
+      eventNames: ['call','conference'],
+      eventStarts: ['now','+3min','+8min','+55min'],
+      eventDurations:['5min', '15min', '30min', '60min', '90min'],
     };
     this.newEvent = {};
   }
@@ -122,14 +128,31 @@ class EventBuilder extends Component {
     }
     return (
       <div className = "EventBuilder" >
-        <EventForm 
-          stage = { this.state.stage } 
-          clickedBack = { this.onBtnPrevClickHandler } 
-          clickedNext = { this.onBtnNextClickHandler }
+        <h2>Please choose event type</h2>
+        <EventNames 
+          names = {this.state.eventNames}
           inputedValue = { this.onInputHandler } 
-          changeDateTime = {this.onChangeDateTimeHandler } 
-          error = { this.state.errors }
-        />
+          error ={ this.state.errors } 
+          showCustom={false}
+          />
+        
+        <h2>Please select the start of event</h2>
+        <EventStarts
+          eventStart = {this.state.eventStarts}
+          changeDateTime = {this.onChangeDateTimeHandler} 
+          error = { this.state.errors } 
+          showCustom = {false}/>
+        
+        <h2>Please select the duration of the event</h2>
+        <EventDuration
+          eventDurations = {this.state.eventDurations}
+          changeDateTime = {this.onChangeDateTimeHandler} 
+          error = { this.state.errors }  
+          showCustom = { false }
+          />
+
+        <button className="btn-confirm">Confirm</button>
+
       </div>
     );
   }
