@@ -1,7 +1,6 @@
 /* global alert */
 import React, { Component } from 'react';
 import './EventBuilder.css';
-import PropTypes from 'prop-types';
 import EventForm from '../../components/CreateEventForm/EventForm.jsx';
 import { connect } from 'react-redux';
 import { createEvent } from '../../store/actions/calendar';
@@ -12,25 +11,17 @@ import EventDuration from '../../components/EventConstructor/EventDuration/Event
 import ConflictEvents from '../../components/EventConstructor/ConflictEvents/ConflictEvents';
 
 class EventBuilder extends Component {
-  static propTypes = {
-    events: PropTypes.array,
-    token: PropTypes.string,
-    calendarId: PropTypes.string,
-    createCalendarEvent: PropTypes.func,
-    hideEventBuilder: PropTypes.func,
-    show: PropTypes.bool
-  };
 
   constructor( props ) {
     super( props );
-    let deltaHours = moment().minute();
+    let deltaHours = 60 - moment().minute();
+    if(deltaHours > 30) deltaHours -= 30;
     this.state = {
-      stage: '1',
       errors: {},
       
       eventNames: ['call','conference'],
-      eventStarts: ['now','+3min','+8min','+55min'],
-      eventDurations:['5min', '15min', '30min', '60min', '90min'],
+      eventStarts: ['now',`+${deltaHours}min`,`+${deltaHours+30}min`, `+${deltaHours+60}min`],
+      eventDurations:['5min', '15min', '30min', '45min','60min', '90min'],
       
       activeName: '',
       activeEvStart: '',
@@ -59,6 +50,11 @@ class EventBuilder extends Component {
       this.setState( { errors: errors } );
     } else if ( id === 'event-end' ) {
       this.newEvent.end = dateTime;
+      if(!this.newEvent.start){
+        this.newEvent.start = moment();
+        
+        this.setState({activeEvStart:'now'});
+      }
     }
     this.checkEventErrors();
   }
@@ -91,38 +87,8 @@ class EventBuilder extends Component {
       return isStartInTheAnotherEvent || isEndInTheAnotherEvent || isEventCoverAnotherEvent;
     } );
     return result;
-  } 
-
-  onBtnNextClickHandler = () => {
-    if ( this.state.stage === '1' ) {
-      if ( this.newEvent.summary ) {
-        this.setState( { stage: '2' } );
-        this.setState( { errors: {} } );
-      } else {
-        this.setState( { errors: {
-          summary: 'event name is required'
-        } } );
-      } 
-    } else {
-      const isTimePresent = this.newEvent.start && this.newEvent.end;
-  
-      if ( this.newEvent.summary && isTimePresent ) {
-        const isHasErrors = this.state.errors.eventEnd || this.state.errors.conflictEvents.length !== 0 
-                              || this.state.errors.eventStart;
-        if ( isHasErrors ) {
-          alert( 'Room will be busy in this time\n Please select another time' );
-          return;
-        }
-        this.props.createCalendarEvent( this.newEvent, this.props.calendarId, this.props.token );
-        this.setState( { stage: '1' } );
-        this.props.hideEventBuilder();
-      } else {
-        alert( 'Please fill all required fields!' );
-      }
-    }
   }
   
-  //////
   onNameItemClickHandler = sender => {
     this.newEvent.summary = sender;
     this.setState({customNameShow: false});
@@ -146,6 +112,7 @@ class EventBuilder extends Component {
     else {
       this.newEvent.start = curTime.add(delta,'minutes');
     }
+    alert(this.newEvent.start.format('HH:mm'));
     this.setState({customEvStart: false});
     this.checkEventErrors();
   }
@@ -168,7 +135,7 @@ class EventBuilder extends Component {
     this.checkEventErrors();
   }
 
-  onCustomEvDurationItemClickHandler = () => {
+  onCustomEvDurationItemClickHandler = sender => {
     this.setState({activeEvDuration: sender});
     this.setState((prevState, prevProps)=>{
       return { customEvDuration: !prevState.customEvDuration }
@@ -177,7 +144,7 @@ class EventBuilder extends Component {
 
   onConfirmClickHandler = () => {
     if(!this.newEvent.summary){
-      this.newEvent.summary = 'custom';
+      this.newEvent.summary = 'Event';
     }
     if ( this.newEvent.start && this.newEvent.end ) {
       const isHasErrors = this.state.errors.eventEnd || this.state.errors.conflictEvents.length !== 0 
@@ -193,6 +160,7 @@ class EventBuilder extends Component {
         activeEvDuration: '',
       });
       this.props.hideEventBuilder();
+      this.newEvent={};
     } else {
       alert( 'Please choose time for event!' );
     }
@@ -238,7 +206,6 @@ class EventBuilder extends Component {
           />
 
         <button className="btn-confirm" onClick = { this.onConfirmClickHandler }>Confirm</button>
-
       </div>
     );
   }

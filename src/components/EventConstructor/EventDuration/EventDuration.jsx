@@ -18,7 +18,7 @@ const eventDuration=(props)=>(
     })
   }
   <button 
-    onClick = {props.customClick} 
+    onClick = {() => props.customClick('custom')} 
     className={ props.active !== 'custom' ? "EventDuration-item": "EventDuration-item EventDuration-item-active"}
    >custom</button>
   { props.showCustom ?
