@@ -9,6 +9,7 @@ import moment from 'moment';
 import EventNames from '../../components/EventConstructor/EventName/EventNames';
 import EventStarts from '../../components/EventConstructor/EventTimeStart/EventStarts';
 import EventDuration from '../../components/EventConstructor/EventDuration/EventDuration';
+import ConflictEvents from '../../components/EventConstructor/ConflictEvents/ConflictEvents';
 
 class EventBuilder extends Component {
   static propTypes = {
@@ -22,22 +23,22 @@ class EventBuilder extends Component {
 
   constructor( props ) {
     super( props );
+    let deltaHours = moment().minute();
     this.state = {
       stage: '1',
       errors: {},
       eventNames: ['call','conference'],
       eventStarts: ['now','+3min','+8min','+55min'],
       eventDurations:['5min', '15min', '30min', '60min', '90min'],
+      customNameShow: false,
+      customEvStart: false,
+      customEvDuration: false
     };
     this.newEvent = {};
   }
 
   onInputHandler = e => {
-    if ( e.target.id === 'eventNameInput' ) {
       this.newEvent.summary = e.target.value;
-    } else if ( e.target.id === 'eventDescriptionInput' ) {
-      this.newEvent.description = e.target.value;
-    }
   }
 
   onChangeDateTimeHandler = ( id, dateTime ) => {
@@ -53,7 +54,10 @@ class EventBuilder extends Component {
     } else if ( id === 'event-end' ) {
       this.newEvent.end = dateTime;
     }
-      
+    this.checkEventErrors();
+  }
+  checkEventErrors = () => {
+    const errors = { ...this.state.errors };
     if ( this.newEvent.start && this.newEvent.end ) { // validation
       if ( this.newEvent.start - this.newEvent.end >= 0 ) {
         errors.eventEnd = 'The event has start faster than the end!';
@@ -111,15 +115,67 @@ class EventBuilder extends Component {
       }
     }
   }
+  
+  //////
+  onNameItemClickHandler = sender => {
+    this.newEvent.summary = sender;
+    this.setState({customNameShow: false});
+  }
 
-  onBtnPrevClickHandler = () => {
-    if ( this.state.stage === '2' ) {
-      this.setState( { stage: '1' } );
-    } else {
-      this.props.hideEventBuilder();
+  onCustomNameItemHandler = sender => {
+    this.setState((prevState,prevProps)=>{
+      return { customNameShow: !prevState.customNameShow }
+    });
+  }
+  
+  onEvStartItemClickHandler = sender => {
+    let curTime = moment();
+    let delta = sender.replace('+','').replace('min', '');
+    if (sender === 'now'){
+      this.newEvent.start = curTime;
     }
-    this.newEvent = {};
-    this.setState( { errors: {} } );// clear errors
+    else {
+      this.newEvent.start = curTime.add(delta,'minutes');
+    }
+    this.setState({customEvStart: false});
+  }
+  
+  onCustomEvStartItemClickHandler = () => {
+    this.setState((prevState,prevProps)=>{
+      return { customEvStart: !prevState.customEvStart }
+    });
+  }
+
+  onEvDurationItemClickHandler = sender => {
+    let duration = sender.replace('min','');
+    if(!this.newEvent.start){
+      this.newEvent.start = moment();
+    }
+    this.newEvent.end = moment(this.newEvent.start).add(duration, 'minutes');
+    this.checkEventErrors();
+  }
+
+  onCustomEvDurationItemClickHandler = () => {
+    this.setState((prevState, prevProps)=>{
+      return { customEvDuration: !prevState.customEvDuration }
+    });
+  }
+
+  onConfirmClickHandler = () => {
+    const isTimePresent = this.newEvent.start && this.newEvent.end;
+  
+    if ( this.newEvent.summary && isTimePresent ) {
+      const isHasErrors = this.state.errors.eventEnd || this.state.errors.conflictEvents.length !== 0 
+                            || this.state.errors.eventStart;
+      if ( isHasErrors ) {
+        alert( 'Room will be busy in this time\n Please select another time' );
+        return;
+      }
+      this.props.createCalendarEvent( this.newEvent, this.props.calendarId, this.props.token );
+      this.props.hideEventBuilder();
+    } else {
+      alert( 'Please fill all required fields!' );
+    }
   }
 
   render() {
@@ -128,30 +184,37 @@ class EventBuilder extends Component {
     }
     return (
       <div className = "EventBuilder" >
+        <ConflictEvents error={this.state.errors}/>
         <h2>Please choose event type</h2>
         <EventNames 
+          itemClick = {this.onNameItemClickHandler}
           names = {this.state.eventNames}
           inputedValue = { this.onInputHandler } 
-          error ={ this.state.errors } 
-          showCustom={false}
+          error ={ this.state.errors }
+          customClick = {this.onCustomNameItemHandler}
+          showCustom={ this.state.customNameShow}
           />
         
         <h2>Please select the start of event</h2>
         <EventStarts
+          itemClick = {this.onEvStartItemClickHandler}
           eventStart = {this.state.eventStarts}
           changeDateTime = {this.onChangeDateTimeHandler} 
           error = { this.state.errors } 
-          showCustom = {false}/>
+          customClick = {this.onCustomEvStartItemClickHandler}
+          showCustom = {this.state.customEvStart}/>
         
         <h2>Please select the duration of the event</h2>
         <EventDuration
+          itemClick = {this.onEvDurationItemClickHandler}
           eventDurations = {this.state.eventDurations}
           changeDateTime = {this.onChangeDateTimeHandler} 
-          error = { this.state.errors }  
-          showCustom = { false }
+          error = { this.state.errors }
+          customClick = {this.onCustomEvDurationItemClickHandler}
+          showCustom = { this.state.customEvDuration }
           />
 
-        <button className="btn-confirm">Confirm</button>
+        <button className="btn-confirm" onClick = { this.onConfirmClickHandler }>Confirm</button>
 
       </div>
     );

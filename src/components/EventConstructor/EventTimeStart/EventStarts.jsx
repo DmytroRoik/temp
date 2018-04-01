@@ -5,12 +5,15 @@ import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog';
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
 import './EventStarts.css';
 
-const eventStarts=(props)=>(
+const eventStarts=(props)=>{
+  return (
   <MuiThemeProvider>
     <div className="EventStarts">
     {
       props.eventStart.map(start=>{
-        return <button className="EventStart-item">{start}</button>
+        return <button 
+          className="EventStart-item"
+          onClick = {() => props.itemClick(start)}>{start}</button>
       })
     }
     <button onClick={props.customClick} className="EventStart-item">custom</button>
@@ -32,5 +35,5 @@ const eventStarts=(props)=>(
     :null }
       </div>
   </MuiThemeProvider>
-  );
+  );}
   export default eventStarts;

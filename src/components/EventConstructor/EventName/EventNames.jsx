@@ -8,6 +8,7 @@ const eventNames=(props)=>(
         return <button 
           key = {name}  
           className="EventName-item"
+          onClick = {() => props.itemClick(name)}
           >{name}</button>
       })
     }

@@ -13,12 +13,13 @@ const eventDuration=(props)=>(
       return <button 
         key = {duration}
         className = "EventDuration-item"
+        onClick = {() => props.itemClick(duration)}
         >{duration}</button>
     })
   }
   <button onClick = {props.customClick} className = "EventDuration-item">custom</button>
   { props.showCustom ?
-    <div className = "inputFileds" >
+    <div className = "inputFileds">
       <DateTimePicker
         returnMomentDate = { true }
         onChange = { dateTime => props.changeDateTime( 'event-end', dateTime ) }
