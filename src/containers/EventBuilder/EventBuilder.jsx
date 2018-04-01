@@ -1,7 +1,6 @@
 /* global alert */
 import React, { Component } from 'react';
 import './EventBuilder.css';
-import EventForm from '../../components/CreateEventForm/EventForm.jsx';
 import { connect } from 'react-redux';
 import { createEvent } from '../../store/actions/calendar';
 import moment from 'moment';
