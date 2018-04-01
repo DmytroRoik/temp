@@ -20,7 +20,9 @@ class CalendarList extends Component {
       showCreateCalendarInput: false
     };
   }
-
+  componentWillUpdate(){
+    console.log(3)
+  }
   onAddCalendarClickHandler = () => {
     if ( this.state.showCreateCalendarInput ) {
       const name = this.newCalendarInput.value.trim() || '';

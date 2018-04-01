@@ -16,7 +16,7 @@ class RoomManager extends Component {
     this.timer = null;
     this.clock = null;
   }
-  
+
   onRoomStatusBtnClickHandler = () => {
     this.setEventBuilderVisibility( true );
   }

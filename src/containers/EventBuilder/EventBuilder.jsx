@@ -14,13 +14,13 @@ class EventBuilder extends Component {
 
   constructor( props ) {
     super( props );
-    let deltaHours = 60 - moment().minute();
-    if(deltaHours > 30) deltaHours -= 30;
+    this.deltaHours = 60 - moment().minute();
+    if(this.deltaHours > 30) this.deltaHours -= 30;
     this.state = {
       errors: {},
       
       eventNames: ['call','conference'],
-      eventStarts: ['now',`+${deltaHours}min`,`+${deltaHours+30}min`, `+${deltaHours+60}min`],
+      eventStarts: ['now',`+${this.deltaHours}min`,`+${this.deltaHours + 30}min`, `+${this.deltaHours + 60}min`],
       eventDurations:['5min', '15min', '30min', '45min','60min', '90min'],
       
       activeName: '',
@@ -32,8 +32,13 @@ class EventBuilder extends Component {
       customEvDuration: false
     };
     this.newEvent = {};
+    this.timer = null;
   }
 
+  shouldComponentUpdate(nextProps, nextStatet){
+    if(nextProps.show!==true&&this.props.show!==true)return false;
+    else return true;
+  }
   onInputHandler = e => {
       this.newEvent.summary = e.target.value;
   }
@@ -112,7 +117,6 @@ class EventBuilder extends Component {
     else {
       this.newEvent.start = curTime.add(delta,'minutes');
     }
-    alert(this.newEvent.start.format('HH:mm'));
     this.setState({customEvStart: false});
     this.checkEventErrors();
   }
@@ -208,6 +212,20 @@ class EventBuilder extends Component {
         <button className="btn-confirm" onClick = { this.onConfirmClickHandler }>Confirm</button>
       </div>
     );
+  }
+  componentDidMount(){
+    const that = this
+    that.timer=setInterval(()=>{
+      that.deltaHours = 60 - moment().minute();
+      if(that.deltaHours > 30) that.deltaHours -= 30;
+      that.setState({
+        eventStarts: ['now',`+${that.deltaHours}min`,`+${that.deltaHours + 30}min`, `+${that.deltaHours + 60}min`]
+      });
+    })
+  }
+  componentWillUnmount(){
+    clearInterval(this.timer);
+    this.timer = null;
   }
 }
 const mapStateToProps = state => {

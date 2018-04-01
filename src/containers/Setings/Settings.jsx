@@ -41,7 +41,6 @@ class Settings extends Component{
   onMakePhotoClickHandler = e => {
     e.preventDefault();
     e.stopPropagation();
-    e.stopImmediatePropagation();
   }
 
   render(){

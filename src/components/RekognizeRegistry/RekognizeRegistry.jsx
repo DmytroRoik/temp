@@ -13,7 +13,7 @@ const  rekognize=(props)=>{
       <label htmlFor="rekognizeEmail">email:</label>
       <input type="email" id="rekognizeEmail"/>
 
-      <button type="button" onCLick={props.onMakePhoto}><CameraIcon/> Make a photo</button>
+      <button type="button" onClick={props.onMakePhoto}><CameraIcon/> Make a photo</button>
       <button type="submit"> Add</button>
     </form>
     {props.img ? <img src="" alt="" className="RekognizePhoto"/>:null}
