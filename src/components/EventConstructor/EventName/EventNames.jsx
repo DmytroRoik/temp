@@ -6,13 +6,16 @@ const eventNames=(props)=>(
     {
       props.names.map(name=>{
         return <button 
-          key = {name}  
-          className="EventName-item"
+          key = {name}
+          className={ props.active !== name ? "EventName-item": "EventName-item  EventName-item-active"}  
           onClick = {() => props.itemClick(name)}
           >{name}</button>
       })
     }
-    <button onClick={props.customClick} className="EventName-item">custom</button>
+    <button 
+      onClick={() => props.customClick('custom')} 
+      className={ props.active !== 'custom' ? "EventName-item": "EventName-item  EventName-item-active"}
+      >custom</button>
     { props.showCustom?
     <div className = "inputFileds" >
       <label

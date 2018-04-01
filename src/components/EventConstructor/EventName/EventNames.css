@@ -14,6 +14,12 @@
   border-radius: 15px;
   width: 170px;
 }
+.EventName-item-active{
+  background: #0a0303!important;
+  color: white;
+  border: 5px solid red!important;
+  padding: 15px!important;
+}
 .inputFileds{
   width: 100%;
   text-align: center;

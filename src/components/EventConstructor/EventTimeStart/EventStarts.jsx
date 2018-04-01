@@ -12,11 +12,16 @@ const eventStarts=(props)=>{
     {
       props.eventStart.map(start=>{
         return <button 
-          className="EventStart-item"
-          onClick = {() => props.itemClick(start)}>{start}</button>
+          className={ props.active !== start ? "EventStart-item": "EventStart-item  EventStart-item-active"}
+          onClick = {(e) => {
+            props.itemClick(start);
+          }}
+          >{start}</button>
       })
     }
-    <button onClick={props.customClick} className="EventStart-item">custom</button>
+    <button onClick={() => props.customClick('custom')} 
+      className={ props.active !== 'custom' ? "EventStart-item": "EventStart-item  EventStart-item-active"}
+      >custom</button>
     { props.showCustom?
       <div className = "inputFileds" >
         <DateTimePicker

@@ -27,9 +27,15 @@ class EventBuilder extends Component {
     this.state = {
       stage: '1',
       errors: {},
+      
       eventNames: ['call','conference'],
       eventStarts: ['now','+3min','+8min','+55min'],
       eventDurations:['5min', '15min', '30min', '60min', '90min'],
+      
+      activeName: '',
+      activeEvStart: '',
+      activeEvDuration: '',
+
       customNameShow: false,
       customEvStart: false,
       customEvDuration: false
@@ -120,15 +126,18 @@ class EventBuilder extends Component {
   onNameItemClickHandler = sender => {
     this.newEvent.summary = sender;
     this.setState({customNameShow: false});
+    this.setState({activeName: sender});
   }
 
   onCustomNameItemHandler = sender => {
+    this.setState({activeName: sender});
     this.setState((prevState,prevProps)=>{
       return { customNameShow: !prevState.customNameShow }
     });
   }
   
   onEvStartItemClickHandler = sender => {
+    this.setState({activeEvStart: sender});
     let curTime = moment();
     let delta = sender.replace('+','').replace('min', '');
     if (sender === 'now'){
@@ -138,33 +147,39 @@ class EventBuilder extends Component {
       this.newEvent.start = curTime.add(delta,'minutes');
     }
     this.setState({customEvStart: false});
+    this.checkEventErrors();
   }
   
-  onCustomEvStartItemClickHandler = () => {
+  onCustomEvStartItemClickHandler = sender => {
+    this.setState({activeEvStart: sender});
     this.setState((prevState,prevProps)=>{
       return { customEvStart: !prevState.customEvStart }
     });
   }
 
   onEvDurationItemClickHandler = sender => {
+    this.setState({activeEvDuration: sender});
     let duration = sender.replace('min','');
     if(!this.newEvent.start){
       this.newEvent.start = moment();
+      this.setState({activeEvStart:'now'});
     }
     this.newEvent.end = moment(this.newEvent.start).add(duration, 'minutes');
     this.checkEventErrors();
   }
 
   onCustomEvDurationItemClickHandler = () => {
+    this.setState({activeEvDuration: sender});
     this.setState((prevState, prevProps)=>{
       return { customEvDuration: !prevState.customEvDuration }
     });
   }
 
   onConfirmClickHandler = () => {
-    const isTimePresent = this.newEvent.start && this.newEvent.end;
-  
-    if ( this.newEvent.summary && isTimePresent ) {
+    if(!this.newEvent.summary){
+      this.newEvent.summary = 'custom';
+    }
+    if ( this.newEvent.start && this.newEvent.end ) {
       const isHasErrors = this.state.errors.eventEnd || this.state.errors.conflictEvents.length !== 0 
                             || this.state.errors.eventStart;
       if ( isHasErrors ) {
@@ -172,9 +187,14 @@ class EventBuilder extends Component {
         return;
       }
       this.props.createCalendarEvent( this.newEvent, this.props.calendarId, this.props.token );
+      this.setState({
+        activeName: '',
+        activeEvStart: '',
+        activeEvDuration: '',
+      });
       this.props.hideEventBuilder();
     } else {
-      alert( 'Please fill all required fields!' );
+      alert( 'Please choose time for event!' );
     }
   }
 
@@ -187,6 +207,7 @@ class EventBuilder extends Component {
         <ConflictEvents error={this.state.errors}/>
         <h2>Please choose event type</h2>
         <EventNames 
+          active = {this.state.activeName}
           itemClick = {this.onNameItemClickHandler}
           names = {this.state.eventNames}
           inputedValue = { this.onInputHandler } 
@@ -197,6 +218,7 @@ class EventBuilder extends Component {
         
         <h2>Please select the start of event</h2>
         <EventStarts
+          active = {this.state.activeEvStart}
           itemClick = {this.onEvStartItemClickHandler}
           eventStart = {this.state.eventStarts}
           changeDateTime = {this.onChangeDateTimeHandler} 
@@ -206,6 +228,7 @@ class EventBuilder extends Component {
         
         <h2>Please select the duration of the event</h2>
         <EventDuration
+          active = {this.state.activeEvDuration}
           itemClick = {this.onEvDurationItemClickHandler}
           eventDurations = {this.state.eventDurations}
           changeDateTime = {this.onChangeDateTimeHandler} 

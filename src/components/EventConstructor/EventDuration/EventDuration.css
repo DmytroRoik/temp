@@ -14,6 +14,12 @@
   text-transform: capitalize;
   width: 170px;
 }
+.EventDuration-item-active{
+  background: #0a0303!important;
+  color: white;
+  border: 5px solid red!important;
+  padding: 15px!important;
+}
 input#event-start,
 input#event-end {
   color: white!important;

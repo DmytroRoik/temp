@@ -12,12 +12,15 @@ const eventDuration=(props)=>(
     props.eventDurations.map( duration => {
       return <button 
         key = {duration}
-        className = "EventDuration-item"
+        className={ props.active !== duration ? "EventDuration-item": "EventDuration-item  EventDuration-item-active"}
         onClick = {() => props.itemClick(duration)}
         >{duration}</button>
     })
   }
-  <button onClick = {props.customClick} className = "EventDuration-item">custom</button>
+  <button 
+    onClick = {props.customClick} 
+    className={ props.active !== 'custom' ? "EventDuration-item": "EventDuration-item EventDuration-item-active"}
+   >custom</button>
   { props.showCustom ?
     <div className = "inputFileds">
       <DateTimePicker
