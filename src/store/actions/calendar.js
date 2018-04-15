@@ -256,13 +256,16 @@ export const loadEvents = ( calendarId, access_token ) => {
   return dispatch => {
     axios.get( `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?access_token=${access_token}` )
       .then( res => { //get events from google
+        //console.log(res);
         const result = res.data;
         const calendarEvents = [];
         const curDate = new Date();
         result.items.forEach( e => { // events
           if(e.end){
-            console.log(e.end)
             const endDatetime = Date.parse( e.end.dateTime );
+            let attendees = e.attendees ? 
+              attendees.filter(a => a.responseStatus === 'accepted' && !a.self)
+              : [{ email: e.creator.email}]
             if ( endDatetime > curDate ) {
               const event = {
                 name: e.summary,
@@ -270,7 +273,7 @@ export const loadEvents = ( calendarId, access_token ) => {
                 start: e.start.dateTime,
                 end: e.end.dateTime,
                 description: e.description,
-                attendees: [...e.attendees.filter(a => a.responseStatus === 'accepted' && !a.self)]
+                attendees
               };
               calendarEvents.push( event );
             }
@@ -358,7 +361,6 @@ export const createEvent = ( event, calendarId, access_token ) => {
       }
     };
   return dispatch => {
-    saveUserToDB('105144585756498708876', 'dmytroroik@gmail.com');
     axios.post( `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`, data, headers )
       .then( res => {
         const newEvent = {

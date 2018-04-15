@@ -1,9 +1,10 @@
 import React from 'react';
 import './RoomStatus.css';
 import { getClock, getTimeString } from '../../service/util';
+import AttendeeItem from '../Attendees/AttendeeItem/AttendeeItem';
 
 /**
- * Use: <RoomStatus status="" eventName="" timeEventBegin="" timeEventFinish="" description="" currentTime="" timeToNextEvent="" clicked={} BtnName="" />
+ * Use: <RoomStatus status="" eventName="" timeEventBegin="" timeEventFinish="" description="" currentTime="" timeToNextEvent="" attendies=[] clicked={} BtnName="" />
  * Props: 
  *  {string} status - status of the room ('Available', 'Reserved' or 'Busy') 
  *  {string} eventName -  name of current event
@@ -33,7 +34,6 @@ const roomStatus = props => {
   } else {
     timeToEvent = (<span>the nearest time in <br/>{`${getTimeString(props.timeToNextEvent).replace( ':', 'h ' )} min`}</span> );
   }
-
   return (
     <div className = "RoomStatus" >
       <div className = { `header header-${props.status}`} >
@@ -46,7 +46,13 @@ const roomStatus = props => {
                 <span>-</span>
                 { getClock(props.timeEventFinish) }
               </div>
-              <p className = "description" > { props.description } </p>
+              <div className = "Attendees-section">
+                <ul className = "Attendees-list">
+                  { (props.attendees || []).map(a => <li>
+                    <AttendeeItem name={a.name} img={a.img}/>
+                  </li>)}
+                </ul>
+              </div>
             </div>
             : <div>
               <div className = "EventStart" >

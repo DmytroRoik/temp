@@ -40,10 +40,10 @@
   background-color: 	#9A7F0C;
 }
 .container-Available,
-  .container-Reserved{
-    position: relative;
-    top: -30px;
-  }
+.container-Reserved{
+  position: relative;
+  top: -30px;
+}
 
 .status{
   color: black;
@@ -109,6 +109,19 @@
 .container-Busy{
   width: 100%;
 }
+.Attendees-section{
+  display: block;
+  overflow: scroll;flow: scroll;
+}
+.Attendees-list{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  max-height: 22vh;
+  margin-bottom: 0;
+}
 
 .btn{
   color: black;
@@ -138,6 +151,12 @@
   font-size: 20px;
 }
 
+::-webkit-scrollbar 
+{
+  display: none;
+    background-color:rgba(79, 79, 79, 0);
+}
+
 @media ( orientation: landscape ){
   .RoomStatus{
     display: flex;
@@ -155,5 +174,4 @@
     top: 220px;
     left: 60%;
   }
-  
 }
