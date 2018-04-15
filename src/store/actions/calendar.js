@@ -223,40 +223,6 @@ export const loadCurrentEvent = event => {
   };
 };
 
-/** 
- * @param {[]} attList - array of people emails
- *  
-*/
-const writeAttendee = ( attList, eventId ) => {
-  const attArr = [];
-  return dispatch => {
-    attList.forEach( a => {
-      if(a.responseStatus === 'accepted' && !a.self){
-       const user = store.getState().calendar.people.filter(p=> p.email === a.email)[0];
-
-       console.log(store.getState().calendar)
-       // loadUserAvatar(a.email);
-        const attendee = {
-          name: a.email.split('@')[0].replace('.', ' '),
-          img: ''
-        }
-       // console.log(attendee);
-      } ''
-      
-    })
-  }
-  
-
-}
-
-export const loadUserAvatar = userID => {
-  axios.get(`https://people.googleapis.com/v1/people/${userID}?personFields=photos&key=${config.API_KEY}`)
-  .then(response=>{
-    const imgUrl = response.data.photos[0].url || '';
-    console.log(imgUrl)})
-  .catch(err=>console.log(err));
-}
-
 export const saveUserToDB = (userID, email) => {
   axios.post('https://roommanager-44c77.firebaseio.com/users.json',{
     email,
@@ -309,8 +275,7 @@ export const loadEvents = ( calendarId, access_token ) => {
               calendarEvents.push( event );
             }
           }
-
-        } );
+        });
         calendarEvents.sort( ( a, b ) => Date.parse( a.start ) - Date.parse( b.start ) );
         return calendarEvents;
       })
@@ -327,7 +292,7 @@ export const loadEvents = ( calendarId, access_token ) => {
               });
             }
           });
-          dispatch( saveCalendarEvents( events ) );
+          dispatch( saveCalendarEvents(events));
           console.log(store.getState().calendar)
         }
       });
