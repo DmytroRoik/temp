@@ -3,6 +3,7 @@ const initialState = {
   allCalendars: [],
   currentCalendar: localStorage.getItem( 'calendarId' ) || '',
   currentCalendarEvents: JSON.parse( localStorage.getItem( 'Events' ) ) || [],
+  people:[],
   
   loading: false,
   access_token: '',
@@ -135,6 +136,13 @@ export default function calendar( state = initialState, action ) {
         ...state,
         currentCalendarEvents: events
       };
+    }
+    case 'SAVE_USERS_ID':
+    {
+      return {
+        ...state,
+        people: [...action.payload]
+      }
     }
     default:
       return state;

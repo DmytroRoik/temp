@@ -1,6 +1,7 @@
 /* global window document alert */
 import axios from 'axios';
 import * as config from '../../config';
+import store from '../store'
 
 /**
 *  Select current calendar by id
@@ -126,6 +127,13 @@ const saveEvent = event => {
   };
 };
 
+const saveUsersTOStoreFromDB = users => {
+  return {
+    type: 'SAVE_USERS_ID',
+    payload: users
+  }
+}
+
 const loadCalendarsFromGoogle = access_token => {
   return dispatch => {
     dispatch( showSpinner( true ) );
@@ -133,8 +141,9 @@ const loadCalendarsFromGoogle = access_token => {
       .then( res => {
         res = res.data.items;
         const calendars = [];
+
         res.forEach( element => {
-          if ( element.accessRole === 'owner' ) {
+          if ( true ) {//element.accessRole === 'owner'
             calendars.push( {
               id: element.id,
               name: element.summary
@@ -179,6 +188,7 @@ export const login = () => {// should rewrite for cordova
     script.onload = () => {
       window.gapi.load( 'client:auth2', () => dispatch( initClient() ) );
     };
+    dispatch(readUsersFromDb())
   };
 };
 
@@ -213,6 +223,63 @@ export const loadCurrentEvent = event => {
   };
 };
 
+/** 
+ * @param {[]} attList - array of people emails
+ *  
+*/
+const writeAttendee = ( attList, eventId ) => {
+  const attArr = [];
+  return dispatch => {
+    attList.forEach( a => {
+      if(a.responseStatus === 'accepted' && !a.self){
+       const user = store.getState().calendar.people.filter(p=> p.email === a.email)[0];
+
+       console.log(store.getState().calendar)
+       // loadUserAvatar(a.email);
+        const attendee = {
+          name: a.email.split('@')[0].replace('.', ' '),
+          img: ''
+        }
+       // console.log(attendee);
+      } ''
+      
+    })
+  }
+  
+
+}
+
+export const loadUserAvatar = userID => {
+  axios.get(`https://people.googleapis.com/v1/people/${userID}?personFields=photos&key=${config.API_KEY}`)
+  .then(response=>{
+    const imgUrl = response.data.photos[0].url || '';
+    console.log(imgUrl)})
+  .catch(err=>console.log(err));
+}
+
+export const saveUserToDB = (userID, email) => {
+  axios.post('https://roommanager-44c77.firebaseio.com/users.json',{
+    email,
+    userID
+  })
+  .then(response=>console.log(response))
+  .catch(err=>console.log(err));
+}
+export const readUsersFromDb = () => {
+  return dispatch => {
+    axios.get('https://roommanager-44c77.firebaseio.com/users.json')
+    .then(response=>{
+      const users = [];
+      for(let key in response.data){
+        const user = response.data[key]
+        users.push(user);
+      }
+      dispatch(saveUsersTOStoreFromDB(users));
+    })
+    .catch(err=>console.log(err));
+  }
+}
+
 /**
 * Load future events for special calendar
 * @param {string} calendarId - id of google calendar
@@ -222,28 +289,48 @@ export const loadCurrentEvent = event => {
 export const loadEvents = ( calendarId, access_token ) => {
   return dispatch => {
     axios.get( `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?access_token=${access_token}` )
-      .then( res => {
-        console.log(res.data);
-        res = res.data;
+      .then( res => { //get events from google
+        const result = res.data;
         const calendarEvents = [];
         const curDate = new Date();
-      
-        res.items.forEach( e => { // events
-          const endDatetime = Date.parse( e.end.dateTime );
-          if ( endDatetime > curDate ) {
-            const event = {
-              name: e.summary,
-              id: e.id,
-              start: e.start.dateTime,
-              end: e.end.dateTime,
-              description: e.description
-            };
-            calendarEvents.push( event );
+        result.items.forEach( e => { // events
+          if(e.end){
+            console.log(e.end)
+            const endDatetime = Date.parse( e.end.dateTime );
+            if ( endDatetime > curDate ) {
+              const event = {
+                name: e.summary,
+                id: e.id,
+                start: e.start.dateTime,
+                end: e.end.dateTime,
+                description: e.description,
+                attendees: [...e.attendees.filter(a => a.responseStatus === 'accepted' && !a.self)]
+              };
+              calendarEvents.push( event );
+            }
           }
+
         } );
         calendarEvents.sort( ( a, b ) => Date.parse( a.start ) - Date.parse( b.start ) );
-        dispatch( saveCalendarEvents( calendarEvents ) );
-      } );
+        return calendarEvents;
+      })
+      .then(events => { //load attendees image url for first event
+        if(events.length > 0){
+          events[0].attendees.forEach(a => {
+            const user = store.getState().calendar.people.filter(u=> u.email === a.email)[0];
+            if(user){
+              axios.get(`https://people.googleapis.com/v1/people/${user.userID}?personFields=photos&key=${config.API_KEY}`)
+              .then(response => {
+                const imgUrl = response.data.photos ? response.data.photos[0].url : '';
+                a.name = a.email.split('@')[0].replace('.', ' '),
+                a.img = imgUrl;
+              });
+            }
+          });
+          dispatch( saveCalendarEvents( events ) );
+          console.log(store.getState().calendar)
+        }
+      });
   };
 };
 
@@ -306,6 +393,7 @@ export const createEvent = ( event, calendarId, access_token ) => {
       }
     };
   return dispatch => {
+    saveUserToDB('105144585756498708876', 'dmytroroik@gmail.com');
     axios.post( `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`, data, headers )
       .then( res => {
         const newEvent = {
@@ -315,6 +403,7 @@ export const createEvent = ( event, calendarId, access_token ) => {
           start: res.data.start.dateTime,
           end: res.data.end.dateTime
         };
+       
         dispatch( saveEvent( newEvent ) );
       } );
   };

@@ -34,6 +34,7 @@ class Settings extends Component{
       name: e.target.rekognizeName.value,
       email: e.target.rekognizeEmail.value
     }
+    alert(this.rekognitionDate.name+''+ this.rekognitionDate.email);
     e.preventDefault();
     e.stopPropagation();
     this.setState({showRekognizeForm: false});
