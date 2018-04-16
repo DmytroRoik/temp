@@ -1,7 +1,8 @@
 /* global window document alert */
 import axios from 'axios';
 import * as config from '../../config';
-import store from '../store'
+import store from '../store';
+import moment from 'moment';
 
 /**
 *  Select current calendar by id
@@ -254,9 +255,11 @@ export const readUsersFromDb = () => {
 */
 export const loadEvents = ( calendarId, access_token ) => {
   return dispatch => {
-    axios.get( `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?access_token=${access_token}` )
+    const curTime = encodeURIComponent(moment().format());
+    const maxTime = encodeURIComponent(moment().add(14,'days').format());
+    axios.get( `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?access_token=${access_token}&singleEvents=true&timeMin=${curTime}&timeMax=${maxTime}` )
       .then( res => { //get events from google
-        //console.log(res);
+        console.log('events',res);
         const result = res.data;
         const calendarEvents = [];
         const curDate = new Date();
@@ -264,7 +267,7 @@ export const loadEvents = ( calendarId, access_token ) => {
           if(e.end){
             const endDatetime = Date.parse( e.end.dateTime );
             let attendees = e.attendees ? 
-              attendees.filter(a => a.responseStatus === 'accepted' && !a.self)
+              e.attendees.filter(a => a.responseStatus === 'accepted' && !a.self)
               : [{ email: e.creator.email}]
             if ( endDatetime > curDate ) {
               const event = {
