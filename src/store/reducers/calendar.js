@@ -2,7 +2,7 @@
 const initialState = {
   allCalendars: [],
   currentCalendar: localStorage.getItem( 'calendarId' ) || '',
-  currentCalendarEvents: JSON.parse( localStorage.getItem( 'Events' ) ) || [],
+  currentCalendarEvents: JSON.parse( localStorage.getItem( 'events' ) ) || [],
   people:[],
   
   loading: false,
@@ -103,10 +103,29 @@ export default function calendar( state = initialState, action ) {
     }
     case 'LOAD_CALENDAR_EVENTS':
     {
-      localStorage.setItem( 'Events', JSON.stringify( action.payload ) );
+      const events = [...action.payload];
+      let isEventsPresent, isAttendeesPresent;
+      if(state.currentCalendarEvents.length !== events.length ){
+        isEventsPresent = false;
+      } else {
+        isEventsPresent = events.every((e, index) => e.id === state.currentCalendarEvents[index].id);
+      }
+      if (events[0].attendees.length > 0 && (state.currentCalendarEvents[0] && state.currentCalendarEvents[0].attendees.length > 0)) {
+        isAttendeesPresent = events[0].attendees.every((attendee, index) => {
+          const storeAttendee = state.currentCalendarEvents[0].attendees[index];
+
+          return storeAttendee.email === attendee.email && storeAttendee.img;
+        });
+      } else {
+        isAttendeesPresent = false;
+      }
+      if(isEventsPresent&&isAttendeesPresent){
+        return state;
+      }
+      localStorage.setItem('events', JSON.stringify(action.payload));
       return {
         ...state,
-        currentCalendarEvents: [...action.payload]   
+        currentCalendarEvents: [...action.payload],
       };
     }
     case 'SAVE_EVENT':
