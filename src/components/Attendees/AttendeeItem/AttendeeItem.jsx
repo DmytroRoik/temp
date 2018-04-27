@@ -5,7 +5,6 @@ import './AttendeeItem.css';
  * Use: <attendeeItem img="" name=""/>
  */
 const attendeeItem=(props)=>{
-  console.log(props.name)
   return (
   <div className="AttendeeItem">
     <img src={props.img} alt={""}/>

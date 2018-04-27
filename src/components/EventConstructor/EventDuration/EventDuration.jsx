@@ -14,6 +14,7 @@ const eventDuration=(props)=>(
         key = {duration}
         className={ props.active !== duration ? "EventDuration-item": "EventDuration-item  EventDuration-item-active"}
         onClick = {() => props.itemClick(duration)}
+        style={{backgroundImage: `url(images/${duration}.png)`}}
         >{duration}</button>
     })
   }

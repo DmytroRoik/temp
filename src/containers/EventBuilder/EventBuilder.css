@@ -3,7 +3,6 @@
   top: 0;
   left: 0;
   width: 100%;
-  border: 1px solid;
   min-height: 100vh;
   background: black;
   display: flex;
@@ -12,7 +11,8 @@
 }
 .EventBuilder h2{
   color: white;
-  margin-bottom: -5px;
+  margin-bottom: 0px;
+  text-align: center;
 }
 .btn-confirm{
   margin-top: 20px;

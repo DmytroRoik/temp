@@ -9,6 +9,7 @@ import EventStarts from '../../components/EventConstructor/EventTimeStart/EventS
 import EventDuration from '../../components/EventConstructor/EventDuration/EventDuration';
 import ConflictEvents from '../../components/EventConstructor/ConflictEvents/ConflictEvents';
 
+import Event from '../../service/Event';
 class EventBuilder extends Component {
 
   constructor( props ) {
@@ -18,9 +19,18 @@ class EventBuilder extends Component {
     this.state = {
       errors: {},
       
-      eventNames: ['call','conference'],
+      eventNames: [
+        {
+          name:'call',
+          icon:'https://image.flaticon.com/icons/svg/17/17819.svg'
+        },
+        {
+          name: 'conference',
+          icon:'https://i.pinimg.com/originals/5e/52/af/5e52af2fa14f8242431ad74d8b0f11fe.png'
+        }
+    ],
       eventStarts: ['now',`+${this.deltaHours}min`,`+${this.deltaHours + 30}min`, `+${this.deltaHours + 60}min`],
-      eventDurations:['5min', '15min', '30min', '45min','60min', '90min'],
+      eventDurations:['5min', '15min', '30min', '45min','60min'],
       
       activeName: '',
       activeEvStart: '',
@@ -30,7 +40,7 @@ class EventBuilder extends Component {
       customEvStart: false,
       customEvDuration: false
     };
-    this.newEvent = {};
+    this.newEvent = new Event();
     this.timer = null;
   }
 
@@ -43,6 +53,16 @@ class EventBuilder extends Component {
   }
 
   onChangeDateTimeHandler = ( id, dateTime ) => {
+
+    const isStart = id === 'event-start';
+    this.newEvent.setCustomTime(dateTime, isStart)
+    .then(i=>console.log('good',i))
+    .catch(err=>console.log(err));
+    
+
+
+
+
     const errors = { ...this.state.errors };
     if ( id === 'event-start' ) {
       if ( dateTime < moment() - 3 * 60 * 1000 ) {
@@ -176,6 +196,8 @@ class EventBuilder extends Component {
     return (
       <div className = "EventBuilder" >
         <ConflictEvents error={this.state.errors}/>
+        
+        <div style={{opacity: 0.8}}>
         <h2>Please choose event type</h2>
         <EventNames 
           active = {this.state.activeName}
@@ -186,7 +208,8 @@ class EventBuilder extends Component {
           customClick = {this.onCustomNameItemHandler}
           showCustom={ this.state.customNameShow}
           />
-        
+        </div>
+        <div style={{opacity: this.state.activeName ? 1 : 0 }}>
         <h2>Please select the start of event</h2>
         <EventStarts
           active = {this.state.activeEvStart}
@@ -196,7 +219,9 @@ class EventBuilder extends Component {
           error = { this.state.errors } 
           customClick = {this.onCustomEvStartItemClickHandler}
           showCustom = {this.state.customEvStart}/>
-        
+        </div>
+
+        <div style={{opacity: this.state.activeEvStart ? 1 : 0 }}>
         <h2>Please select the duration of the event</h2>
         <EventDuration
           active = {this.state.activeEvDuration}
@@ -207,8 +232,10 @@ class EventBuilder extends Component {
           customClick = {this.onCustomEvDurationItemClickHandler}
           showCustom = { this.state.customEvDuration }
           />
-
-        <button className="btn-confirm" onClick = { this.onConfirmClickHandler }>Confirm</button>
+        </div>
+        <div style={{opacity: this.state.activeEvDuration ? 1 : 0 }}>
+          <button className="btn-confirm" onClick = { this.onConfirmClickHandler }>Confirm</button>
+        </div>
       </div>
     );
   }

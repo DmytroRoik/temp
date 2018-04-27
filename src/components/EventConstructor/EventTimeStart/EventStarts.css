@@ -4,14 +4,14 @@
   justify-content: center;
 }
 .EventStart-item-active{
-  background: #0a0303!important;
-  color: white;
-  border: 5px solid red!important;
-  padding: 15px!important;
+  opacity: 1!important;
+  outline: none;
+  color: #262626;
+  background-color: #c1c1c0!important;
 }
 .EventStart-item{
   padding: 20px;
-  margin: 15px;
+  margin: 1px;
   font-weight: bold;
   text-transform: capitalize;
   font-size: 20px;
@@ -19,6 +19,7 @@
   border: none;
   border-radius: 15px;
   width: 170px;
+  opacity: 0.5;
 }
 .inputFileds .datetime-container{
   margin-top: 10px;

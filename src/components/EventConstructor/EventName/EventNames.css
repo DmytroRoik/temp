@@ -5,20 +5,25 @@
 }
 .EventName-item{
   padding: 17px 30px;
-  margin: 20px;
-  background: yellow;
+  margin: 2px;
+  background: #f1f1cb;
   border: none;
   font-weight: bold;
   font-size: 20px;
   text-transform: capitalize;
   border-radius: 15px;
   width: 170px;
+  padding-left: 40px;
+  background-repeat: no-repeat;
+  background-size: 10 10;
+  background-size: 30px 30px;
+  background-position: 11px 14px;
+  opacity: 0.5;
 }
 .EventName-item-active{
-  background: #0a0303!important;
-  color: white;
-  border: 5px solid red!important;
-  padding: 15px!important;
+    opacity: 1;
+    outline: none;
+    background-color: white;
 }
 .inputFileds{
   width: 100%;

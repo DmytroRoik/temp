@@ -56,7 +56,7 @@
   color: white;
   text-align: center;
   padding: 0;
-  font-size: 28px;
+  font-size: 40px;
   width: 100%;
 }
 
@@ -70,7 +70,7 @@
 .arrow{
   height: 10px;
   position: absolute;
-  top: 250px;
+  top: 320px;
   left: 62%;
   z-index: 0;
   font-size: 132px;
@@ -95,15 +95,15 @@
 
 .clock{
   color: white;
-  font-size: 80px;
+  font-size: 165px;
   text-align: center;
-  font-family: Garuda;
   padding-bottom: 0;
   z-index: 1;
+  font-family: "Dejavu Sans";
+  margin-top: 70px;
 }
 
 .container{
-  width: 320px;
   margin: 0 auto;  
 }
 .container-Busy{
@@ -125,12 +125,14 @@
 
 .btn{
   color: black;
-  padding: 20px;
+  padding: 5px;
   background-color: rgb(13,149,5);
   font-size: 30px;
   max-width: 67%;
   border: 1px solid black;
   border-radius: 3px;
+  position: relative;
+  top: 40px;
 }
 .btn.btn-Busy{
   background-color: #B80000;
@@ -171,7 +173,10 @@
     height: 100vh;
   }
   .arrow{
-    top: 220px;
-    left: 60%;
+    top: 375px;
+    left: 69%;
+  }
+  .btn{
+    top: 90px;
   }
 }
