@@ -253,56 +253,54 @@ export const readUsersFromDb = () => {
 * @param {string} access_token - user token for google api
 * @returns { action } dispatch action
 */
-export const loadEvents = ( calendarId, access_token ) => {
-  return dispatch => {
-    const curTime = encodeURIComponent(moment().format());
-    const maxTime = encodeURIComponent(moment().add(14,'days').format());
-    axios.get( `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?access_token=${access_token}&singleEvents=true&timeMin=${curTime}&timeMax=${maxTime}` )
-      .then( res => { //get events from google
-        console.log('events',res);
-        const result = res.data;
-        const calendarEvents = [];
-        const curDate = new Date();
-        result.items.forEach( e => { // events
-          if(e.end){
-            const endDatetime = Date.parse( e.end.dateTime );
-            let attendees = e.attendees ? 
-              e.attendees.filter(a => a.responseStatus === 'accepted' && !a.self)
-              : [{ email: e.creator.email}]
-            if ( endDatetime > curDate ) {
-              const event = {
-                name: e.summary,
-                id: e.id,
-                start: e.start.dateTime,
-                end: e.end.dateTime,
-                description: e.description,
-                attendees
-              };
-              calendarEvents.push( event );
-            }
+export const loadEvents = (calendarId, accessToken) => (dispatch) => {
+  const curTime = encodeURIComponent(moment().format());
+  const maxTime = encodeURIComponent(moment().add(14, 'days').format());
+  axios.get( `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?access_token=${accessToken}&singleEvents=true&timeMin=${curTime}&timeMax=${maxTime}` )
+    .then((res) => { // get events from google
+      const result = res.data;
+      const calendarEvents = [];
+      const curDate = new Date();
+      result.items.forEach((e) => { // events
+        if (e.end) {
+          const endDatetime = Date.parse(e.end.dateTime);
+          const attendees = e.attendees ?
+            e.attendees.filter(a => a.responseStatus === 'accepted' && !a.resource).sort(it=>!it.organizer && it.comment !== "Organizer")
+            : [];
+          if (endDatetime > curDate) {
+            const event = {
+              name: e.summary,
+              id: e.id,
+              start: e.start.dateTime,
+              end: e.end.dateTime,
+              attendees,
+            };
+            calendarEvents.push(event);
           }
-        });
-        calendarEvents.sort( ( a, b ) => Date.parse( a.start ) - Date.parse( b.start ) );
-        return calendarEvents;
-      })
-      .then(events => { //load attendees image url for first event
-        if(events.length > 0){
-          events[0].attendees.forEach(a => {
-            const user = store.getState().calendar.people.filter(u=> u.email === a.email)[0];
-            if(user){
-              axios.get(`https://people.googleapis.com/v1/people/${user.userID}?personFields=photos&key=${config.API_KEY}`)
-              .then(response => {
-                const imgUrl = response.data.photos ? response.data.photos[0].url : '';
-                a.name = a.email.split('@')[0].replace('.', ' '),
-                a.img = imgUrl;
-              });
-            }
-          });
-          dispatch( saveCalendarEvents(events));
-          console.log(store.getState().calendar)
         }
       });
-  };
+      calendarEvents.sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
+      return calendarEvents;
+    })
+    .then((events) => { // load attendees image url for first event
+      if (events.length > 0) {
+        events[0].attendees.forEach((a) => {
+          const user = store.getState().calendar.people.filter(u => u.email === a.email)[0];
+          a.name = a.email.split('@')[0].replace('.', ' ');
+          if (user) {
+            axios.get(`https://people.googleapis.com/v1/people/${user.userID}?personFields=photos&key=${config.API_KEY}`)
+              .then((response) => {
+                const imgUrl = response.data.photos
+                  ? response.data.photos[0].url
+                  : 'https://res.cloudinary.com/demo/image/upload/w_100,h_100,c_thumb,g_face,r_20,d_avatar.png/non_existing_id.png'; // default image
+                a.img = imgUrl;
+              });
+          }
+        });
+      }
+      return events;
+    })
+    .then(events => dispatch(saveCalendarEvents(events)))
 };
 
 /**
@@ -346,6 +344,8 @@ export const createCalendar = ( calendarName, access_token ) => {
   *  @returns { action } dispatch action
   */
 export const createEvent = ( event, calendarId, access_token ) => {
+  const creator = 'grynik25.03@gmail.com';
+  
   const data = {
       start: {
         dateTime: event.start.format(),
@@ -355,14 +355,21 @@ export const createEvent = ( event, calendarId, access_token ) => {
         dateTime: event.end.format(),
         timeZone: 'Europe/Kiev'
       },
-      description: event.description,
-      summary: event.summary || ''
+      "attendees": [],
+      summary: event.summary || 'Event',
     },
     headers = {
       headers: {
         Authorization: `Bearer ${access_token}`
       }
     };
+    if(creator){
+      data.attendees.push({
+        email: creator,
+        responseStatus: 'accepted',
+        comment: "Organizer"
+      });
+    }
   return dispatch => {
     axios.post( `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`, data, headers )
       .then( res => {
