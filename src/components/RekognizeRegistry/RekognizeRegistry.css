@@ -1,3 +1,13 @@
+.RekognizeRegistry{
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .RekognizeRegistry form{
   display: flex;
   flex-direction: column;
@@ -11,16 +21,6 @@
 .RekognizeRegistry form input{
   padding: 10px;
   font-size: 20px;
-}
-.RekognizeRegistry form::before{
-  content: '';
-  width: 20px;
-  height: 20px;
-  background-color: #bd9d9d;
-  transform: rotateZ(45deg);
-  position: relative;
-  top: -10px;
-  left: 30px;
 }
 .RekognizeRegistry form button{
   padding: 20px;
